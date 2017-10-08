@@ -24,9 +24,15 @@ void RenderScene(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
 
-	// Renderer Test
-	g_Renderer->DrawSolidRect(0, 0, 0, 4, 1, 0, 1, 1); // x, y, z, size, r, g, b, a
+	GameObject* pObj = new GameObject[5];
+	pObj[0].SettingPos(100, 100, 0);
 
+
+	// Renderer Test
+	g_Renderer->DrawSolidRect(pObj[0].GetPosx(), 0,0, 4, 1, 0, 1, 1); // x, y, z, size, r, g, b, a
+
+
+	delete [] pObj;
 
 	glutSwapBuffers();
 }
@@ -76,6 +82,8 @@ int main(int argc, char **argv)
 	{
 		std::cout << "Renderer could not be initialized.. \n";
 	}
+
+
 
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);

@@ -1,20 +1,13 @@
 #pragma once
 
-#include <string>
-#include <cstdlib>
-#include <fstream>
-#include <iostream>
-#include <stdlib.h>
-#include <time.h>
-#include "Renderer.h"
-
 class GameObject
 {
 public:
 	GameObject();
 	~GameObject();
 
-private:
+protected:
+//public:
 	float pos_x;
 	float pos_y;
 	float pos_z;
@@ -26,6 +19,10 @@ private:
 	float b;
 	float a;
 
-	
+public:
+	void SettingPos(float x, float y, float z);
+	float GetPosx();
 };
+
+
 
