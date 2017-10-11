@@ -5,23 +5,27 @@ class GameObject
 public:
 	GameObject();
 	~GameObject();
+	void SettingPos(float x, float y, float z);
+	void Update();
 
 protected:
-//public:
-	float pos_x;
-	float pos_y;
-	float pos_z;
+
+public:
+	float posX;
+	float posY;
+	float posZ;
+
+	float speedX;
+	float speedY;
+	float speedZ;
 
 	float size;
 	
-	float r;
-	float g;
-	float b;
-	float a;
+	float colorR;
+	float colorG;
+	float colorB;
+	float colorA;
 
-public:
-	void SettingPos(float x, float y, float z);
-	float GetPosx();
 };
 
 

@@ -17,22 +17,19 @@ but WITHOUT ANY WARRANTY.
 #include "GameObject.h"
 
 Renderer *g_Renderer = NULL;
-GameObject *object ;
+GameObject *object = NULL ;
 
 void RenderScene(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
 
-	GameObject* pObj = new GameObject[5];
-	pObj[0].SettingPos(100, 100, 0);
-
-
 	// Renderer Test
-	g_Renderer->DrawSolidRect(pObj[0].GetPosx(), 0,0, 4, 1, 0, 1, 1); // x, y, z, size, r, g, b, a
-
-
-	delete [] pObj;
+	g_Renderer->DrawSolidRect(
+		object->posX, object->posY, object->posZ, 
+		object->size, 
+		object->colorR, object->colorG, object->colorB, object->colorA);
+	object->Update();
 
 	glutSwapBuffers();
 }
@@ -40,11 +37,15 @@ void RenderScene(void)
 void Idle(void)
 {
 	RenderScene();
+	object->Update();
 }
 
 void MouseInput(int button, int state, int x, int y)
 {
-	RenderScene();
+	//RenderScene();
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+
+	}
 }
 
 void KeyInput(unsigned char key, int x, int y)
@@ -78,11 +79,12 @@ int main(int argc, char **argv)
 
 	// Initialize Renderer
 	g_Renderer = new Renderer(500, 500);
+	object = new GameObject;
+
 	if (!g_Renderer->IsInitialized())
 	{
 		std::cout << "Renderer could not be initialized.. \n";
 	}
-
 
 
 	glutDisplayFunc(RenderScene);
@@ -93,6 +95,7 @@ int main(int argc, char **argv)
 
 	glutMainLoop();
 
+	delete object;
 	delete g_Renderer;
 
     return 0;
