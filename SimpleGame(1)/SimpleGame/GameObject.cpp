@@ -22,7 +22,7 @@ GameObject::~GameObject()
 {
 }
 
-void GameObject::SettingPos(float x, float y, float z)
+void GameObject::SettingPos(int x, int y, int z)
 {
 	posX = x;
 	posY = y;

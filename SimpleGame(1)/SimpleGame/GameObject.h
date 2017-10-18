@@ -5,15 +5,15 @@ class GameObject
 public:
 	GameObject();
 	~GameObject();
-	void SettingPos(float x, float y, float z);
+	void SettingPos(int x, int y, int z);
 	void Update();
 
 protected:
 
 public:
-	float posX;
-	float posY;
-	float posZ;
+	int posX;
+	int posY;
+	int posZ;
 
 	float speedX;
 	float speedY;

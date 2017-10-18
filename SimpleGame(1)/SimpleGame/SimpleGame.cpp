@@ -15,21 +15,28 @@ but WITHOUT ANY WARRANTY.
 
 #include "Renderer.h"
 #include "GameObject.h"
+#include "SceneMgr.h"
 
 Renderer *g_Renderer = NULL;
-GameObject *object = NULL ;
+SceneMgr *g_SceneMgr = NULL;
 
 void RenderScene(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
 
-	// Renderer Test
-	g_Renderer->DrawSolidRect(
-		object->posX, object->posY, object->posZ, 
-		object->size, 
-		object->colorR, object->colorG, object->colorB, object->colorA);
-	object->Update();
+	for (int i = 0; i < g_SceneMgr->CountObject(); i++) {
+		g_Renderer->DrawSolidRect(
+			g_SceneMgr->GetObjectStats(i)->posX,
+			g_SceneMgr->GetObjectStats(i)->posY,
+			g_SceneMgr->GetObjectStats(i)->posZ,
+			g_SceneMgr->GetObjectStats(i)->size,
+			g_SceneMgr->GetObjectStats(i)->colorR, 
+			g_SceneMgr->GetObjectStats(i)->colorG, 
+			g_SceneMgr->GetObjectStats(i)->colorB, 
+			g_SceneMgr->GetObjectStats(i)->colorA );
+		g_SceneMgr->Update();
+	}
 
 	glutSwapBuffers();
 }
@@ -37,14 +44,14 @@ void RenderScene(void)
 void Idle(void)
 {
 	RenderScene();
-	object->Update();
+	g_SceneMgr->Update();
 }
 
 void MouseInput(int button, int state, int x, int y)
 {
 	//RenderScene();
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-
+		g_SceneMgr->AddObject(x, y, 0);
 	}
 }
 
@@ -79,7 +86,7 @@ int main(int argc, char **argv)
 
 	// Initialize Renderer
 	g_Renderer = new Renderer(500, 500);
-	object = new GameObject;
+	g_SceneMgr = new SceneMgr();
 
 	if (!g_Renderer->IsInitialized())
 	{
@@ -95,8 +102,10 @@ int main(int argc, char **argv)
 
 	glutMainLoop();
 
-	delete object;
 	delete g_Renderer;
+	for (int i = 0; i < g_SceneMgr->CountObject(); i++) {
+		g_SceneMgr->DeleteObject(i);
+	}
 
     return 0;
 }
