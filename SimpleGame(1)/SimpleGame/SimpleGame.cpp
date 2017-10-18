@@ -35,8 +35,8 @@ void RenderScene(void)
 			g_SceneMgr->GetObjectStats(i)->colorG, 
 			g_SceneMgr->GetObjectStats(i)->colorB, 
 			g_SceneMgr->GetObjectStats(i)->colorA );
-		g_SceneMgr->Update();
 	}
+	g_SceneMgr->Update();
 
 	glutSwapBuffers();
 }
@@ -51,7 +51,7 @@ void MouseInput(int button, int state, int x, int y)
 {
 	//RenderScene();
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-		g_SceneMgr->AddObject(x, y, 0);
+		g_SceneMgr->AddObject(x-250, 250-y, 0);
 	}
 }
 

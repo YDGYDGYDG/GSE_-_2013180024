@@ -5,15 +5,13 @@ class GameObject
 public:
 	GameObject();
 	~GameObject();
-	void SettingPos(int x, int y, int z);
+	void SettingPos(float x, float y, float z);
 	void Update();
+	void Collision();
 
-protected:
-
-public:
-	int posX;
-	int posY;
-	int posZ;
+	float posX;
+	float posY;
+	float posZ;
 
 	float speedX;
 	float speedY;
@@ -25,6 +23,11 @@ public:
 	float colorG;
 	float colorB;
 	float colorA;
+	typedef struct _boundingSphere {
+		float radious;
+
+	}boundingBox;
+	boundingBox bb;
 
 };
 

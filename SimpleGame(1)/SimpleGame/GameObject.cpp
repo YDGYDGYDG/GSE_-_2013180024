@@ -22,7 +22,7 @@ GameObject::~GameObject()
 {
 }
 
-void GameObject::SettingPos(int x, int y, int z)
+void GameObject::SettingPos(float x, float y, float z)
 {
 	posX = x;
 	posY = y;
@@ -30,7 +30,7 @@ void GameObject::SettingPos(int x, int y, int z)
 }
 
 void GameObject::Update() {
-	float time = 1.0;
+	float time = 1;
 	posX = posX + speedX * time;
 	posY = posY + speedY * time;
 	if (posX > 250) { speedX = -speedX; }
@@ -38,4 +38,8 @@ void GameObject::Update() {
 	if (posY > 250) { speedY = -speedY; }
 	if (posY < -250) { speedY = -speedY; }
 	//posZ = posZ + speedZ * time;
+}
+
+void GameObject::Collision() {
+
 }
