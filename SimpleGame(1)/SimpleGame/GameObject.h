@@ -12,9 +12,10 @@ public:
 	float posY;
 	float posZ;
 
-	float speedX;
-	float speedY;
-	float speedZ;
+	float speed;
+
+	float dirX;
+	float dirY;
 
 	float size;
 	

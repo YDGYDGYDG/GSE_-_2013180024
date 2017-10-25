@@ -8,9 +8,9 @@ GameObject::GameObject()
 	posX = 0;
 	posY = 0;
 	posZ = 0;
-	speedX = rand() % 15 + 5;
-	speedY = rand() % 15 + 5;
-	speedZ = rand() % 15 + 5;
+	speed = rand() % 15 + 15;
+	dirX = 1;
+	dirY = 1;	
 	size = 15;
 	colorR = 100;
 	colorG = 100;
@@ -38,23 +38,21 @@ void GameObject::SettingPos(float x, float y, float z)
 
 void GameObject::Update(float elapsedTime) {
 
-	float elapsedTimeInSecond = elapsedTime / 1000.f;
-	posX = posX + speedX * elapsedTimeInSecond;
-	posY = posY + speedY * elapsedTimeInSecond;
-	//float time = 1;
-	//posX = posX + speedX * time;
-	//posY = posY + speedY * time;
-	if (posX > 250.f) { speedX = -speedX; }
-	if (posX < -250.f) { speedX = -speedX; }
-	if (posY > 250.f) { speedY = -speedY; }
-	if (posY < -250.f) { speedY = -speedY; }
+	float elapsedTimeInSecond = elapsedTime / 10.f;
+	std::cout << elapsedTimeInSecond << std::endl;
+	posX = posX + (speed * dirX) * elapsedTimeInSecond;
+	posY = posY + (speed * dirY) * elapsedTimeInSecond;
+
+	if (posX > 250.f) { dirX = -1; }
+	if (posX < -250.f) { dirX = 1; }
+	if (posY > 250.f) { dirY = -1; }
+	if (posY < -250.f) { dirY = 1; }
 
 	bb.leftBottom[0] = posX - (size / 2);
 	bb.leftBottom[1] = posY - (size / 2);
 	bb.rightTop[0] = posX + (size / 2);
 	bb.rightTop[1] = posY + (size / 2);
 
-	std::cout << posX << ", " <<posY << std::endl;
 
 	lifeTime--;
 	if (lifeTime <= 0) {
