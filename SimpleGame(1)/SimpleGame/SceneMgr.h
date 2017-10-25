@@ -2,7 +2,7 @@
 
 #include "GameObject.h"
 
-#define MAX_OBJECTS_COUNT 10
+#define MAX_OBJECTS_COUNT 50 //여기에 적힌 수보다 1 적은 개수가 나타남
 
 class SceneMgr
 {

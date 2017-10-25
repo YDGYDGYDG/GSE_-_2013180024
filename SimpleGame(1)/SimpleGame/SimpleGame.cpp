@@ -53,6 +53,7 @@ void Idle(void)
 	g_prevTime = currentTime;
 	RenderScene();
 	g_SceneMgr->Update(elapsedTime);
+	
 }
 
 void MouseInput(int button, int state, int x, int y)

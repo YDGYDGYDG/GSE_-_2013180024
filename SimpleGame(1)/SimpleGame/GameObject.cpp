@@ -4,13 +4,14 @@
 
 GameObject::GameObject()
 {
+	srand(time(NULL));
 	posX = 0;
 	posY = 0;
 	posZ = 0;
-	speedX = 20;
-	speedY = 20;
-	speedZ = 20;
-	size = 10;
+	speedX = rand() % 15 + 5;
+	speedY = rand() % 15 + 5;
+	speedZ = rand() % 15 + 5;
+	size = 15;
 	colorR = 100;
 	colorG = 100;
 	colorB = 100;
@@ -40,11 +41,20 @@ void GameObject::Update(float elapsedTime) {
 	float elapsedTimeInSecond = elapsedTime / 1000.f;
 	posX = posX + speedX * elapsedTimeInSecond;
 	posY = posY + speedY * elapsedTimeInSecond;
-	if (posX > 250) { speedX = -speedX; }
-	if (posX < -250) { speedX = -speedX; }
-	if (posY > 250) { speedY = -speedY; }
-	if (posY < -250) { speedY = -speedY; }
-	//posZ = posZ + speedZ * time;
+	//float time = 1;
+	//posX = posX + speedX * time;
+	//posY = posY + speedY * time;
+	if (posX > 250.f) { speedX = -speedX; }
+	if (posX < -250.f) { speedX = -speedX; }
+	if (posY > 250.f) { speedY = -speedY; }
+	if (posY < -250.f) { speedY = -speedY; }
+
+	bb.leftBottom[0] = posX - (size / 2);
+	bb.leftBottom[1] = posY - (size / 2);
+	bb.rightTop[0] = posX + (size / 2);
+	bb.rightTop[1] = posY + (size / 2);
+
+	std::cout << posX << ", " <<posY << std::endl;
 
 	lifeTime--;
 	if (lifeTime <= 0) {
