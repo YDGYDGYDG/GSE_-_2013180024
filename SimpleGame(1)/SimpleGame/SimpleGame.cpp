@@ -19,9 +19,14 @@ but WITHOUT ANY WARRANTY.
 
 Renderer *g_Renderer = NULL;
 SceneMgr *g_SceneMgr = NULL;
+float g_prevTime = 0;
 
 void RenderScene(void)
 {
+	DWORD currentTime = timeGetTime();
+	DWORD elapsedTime = currentTime - g_prevTime;
+	g_prevTime = currentTime;
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
 
@@ -36,15 +41,18 @@ void RenderScene(void)
 			g_SceneMgr->GetObjectStats(i)->colorB, 
 			g_SceneMgr->GetObjectStats(i)->colorA );
 	}
-	g_SceneMgr->Update();
+	g_SceneMgr->Update(elapsedTime);
 
 	glutSwapBuffers();
 }
 
 void Idle(void)
 {
+	DWORD currentTime = timeGetTime();
+	DWORD elapsedTime = currentTime - g_prevTime;
+	g_prevTime = currentTime;
 	RenderScene();
-	g_SceneMgr->Update();
+	g_SceneMgr->Update(elapsedTime);
 }
 
 void MouseInput(int button, int state, int x, int y)
