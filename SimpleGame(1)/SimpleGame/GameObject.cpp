@@ -34,7 +34,7 @@ void GameObject::Update(float elapsedTime) {
 	bb.rightTop[0] = posX + (size / 2);
 	bb.rightTop[1] = posY + (size / 2);
 
-	fireBulletCool = (int)elapsedTime%1000;
+	fireBulletCool = 10*elapsedTimeInSecond;
 
 	//lifeTime--;
 

@@ -17,7 +17,6 @@ but WITHOUT ANY WARRANTY.
 #include "GameObject.h"
 #include "SceneMgr.h"
 
-Renderer *g_Renderer = NULL;
 SceneMgr *g_SceneMgr = NULL;
 float g_prevTime = 0;
 
@@ -30,18 +29,9 @@ void RenderScene(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
 
-	for (int i = 0; i < g_SceneMgr->CountObject(); i++) {
-		g_Renderer->DrawSolidRect(
-			g_SceneMgr->GetObjectStats(i)->posX,
-			g_SceneMgr->GetObjectStats(i)->posY,
-			g_SceneMgr->GetObjectStats(i)->posZ,
-			g_SceneMgr->GetObjectStats(i)->size,
-			g_SceneMgr->GetObjectStats(i)->colorR, 
-			g_SceneMgr->GetObjectStats(i)->colorG, 
-			g_SceneMgr->GetObjectStats(i)->colorB, 
-			g_SceneMgr->GetObjectStats(i)->colorA );
-	}
 	g_SceneMgr->Update(elapsedTime);
+	g_SceneMgr->DrawObjects();
+
 	glutSwapBuffers();
 }
 
@@ -94,15 +84,8 @@ int main(int argc, char **argv)
 	}
 
 	// Initialize Renderer
-	g_Renderer = new Renderer(500, 500);
 	g_SceneMgr = new SceneMgr();
 	g_SceneMgr->AddObject(0, 0, 0, OBJECT_BUILDING);
-
-	if (!g_Renderer->IsInitialized())
-	{
-		std::cout << "Renderer could not be initialized.. \n";
-	}
-
 
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);
@@ -112,8 +95,7 @@ int main(int argc, char **argv)
 
 	glutMainLoop();
 
-	delete g_Renderer;
-	g_SceneMgr->DeleteObject();
+	delete g_SceneMgr;
 
 
     return 0;

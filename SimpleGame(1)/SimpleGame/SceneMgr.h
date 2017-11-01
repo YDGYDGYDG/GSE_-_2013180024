@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GameObject.h"
+#include "Renderer.h"
 
 #define MAX_BUILDINGS_COUNT 1
 #define MAX_CHARACTERS_COUNT 10
@@ -19,7 +20,6 @@ public:
 	SceneMgr();
 	~SceneMgr();
 
-	GameObject* m_gameObject[MAX_OBJECTS_COUNT];
 	int objectCounter = 0;
 
 	void AddObject(int x, int y, int z, int type); //객체생성
@@ -28,7 +28,14 @@ public:
 	GameObject** GetObjectStats(); //모든 객체정보 리턴
 	int CountObject(); //객체 개수 리턴
 	void Update(float elapsedTime); 
-	bool Collision(GameObject a, GameObject b); //충돌
 	void DeleteDeadObject(); //n번째 객체 삭제
+	void DrawObjects();
+
+private:
+	bool Collision(GameObject a, GameObject b); //충돌
+	GameObject* m_gameObject[MAX_OBJECTS_COUNT];
+	GameObject* m_gameObject_building[MAX_OBJECTS_COUNT];
+	GameObject* m_gameObject_character[MAX_OBJECTS_COUNT];
+	Renderer *m_renderer;
 };
 

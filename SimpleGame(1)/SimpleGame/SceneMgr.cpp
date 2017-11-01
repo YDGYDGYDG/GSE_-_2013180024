@@ -5,6 +5,8 @@
 
 SceneMgr::SceneMgr()
 {
+	m_renderer = new Renderer(500,500);
+
 	for (int i = 0; i < MAX_OBJECTS_COUNT; i++) {
 		m_gameObject[i] = NULL;
 	}
@@ -16,12 +18,36 @@ SceneMgr::~SceneMgr()
 	DeleteObject();
 }
 
+void SceneMgr::DrawObjects()
+{
+	m_renderer->DrawSolidRect(0, 0, 0, 0, 0, 0, 0, 1.0);
+
+	for (int i = 0; i < MAX_OBJECTS_COUNT; i++)
+	{
+		if (m_gameObject[i] != NULL)
+		{
+			// Renderer Test
+			m_renderer->DrawSolidRect(
+				m_gameObject[i]->posX,
+				m_gameObject[i]->posY,
+				m_gameObject[i]->posZ,
+				m_gameObject[i]->size,
+				m_gameObject[i]->colorR, 
+				m_gameObject[i]->colorG, 
+				m_gameObject[i]->colorB, 
+				m_gameObject[i]->colorA
+			);
+		}
+	}
+}
+
+
 void SceneMgr::AddObject(int x, int y, int z, int type)
 {
 	m_gameObject[objectCounter] = new GameObject();
 	m_gameObject[objectCounter]->SettingPos(x, y, z);
 	m_gameObject[objectCounter]->SettingType(type);
-	if (objectCounter < MAX_OBJECTS_COUNT-1) {
+	if (objectCounter < MAX_CHARACTERS_COUNT ) {
 		objectCounter++;
 	}
 }
@@ -51,7 +77,7 @@ void SceneMgr::Update(float elapsedTime)
 	for (int i = 0; i < objectCounter; i++) {
 		m_gameObject[i]->Update(elapsedTime);
 		if (m_gameObject[i]->GetType() == OBJECT_BUILDING) {
-			if (m_gameObject[i]->fireBulletCool > 1.0f) {
+			if (m_gameObject[i]->fireBulletCool > 0.5f) {
 				AddObject(m_gameObject[i]->posX, m_gameObject[i]->posY, m_gameObject[i]->posZ, OBJECT_ARROW);
 				m_gameObject[i]->fireBulletCool = 0;
 			}
@@ -84,7 +110,7 @@ void SceneMgr::Update(float elapsedTime)
 		}
 	}
 
-	//DeleteDeadObject();
+	DeleteDeadObject();
 
 }
 
@@ -106,7 +132,7 @@ void SceneMgr::DeleteDeadObject() {
 		if (m_gameObject[i]->lifeCount <= 0) {
 			delete m_gameObject[i];
 			for (int j = i; j < objectCounter; j++) {
-				m_gameObject[i] = m_gameObject[j];
+				*m_gameObject[i] = *m_gameObject[j];
 			}
 		}
 	}
