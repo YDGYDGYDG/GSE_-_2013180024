@@ -7,6 +7,10 @@ public:
 	~GameObject();
 	void SettingPos(float x, float y, float z);
 	void Update(float elapsedTime);
+	void SettingType(int objectType);
+	int GetType();
+
+	int type;
 
 	float posX;
 	float posY;
@@ -26,6 +30,9 @@ public:
 
 	bool Life;
 	float lifeTime;
+	float lifeCount;
+
+	float fireBulletCool;
 
 	typedef struct _boundingBox {
 		float leftBottom[2];
@@ -33,6 +40,8 @@ public:
 	}boundingBox;
 
 	boundingBox bb;
+	bool collisionCounter = false;
+	bool collisionCheck = false;
 };
 
 

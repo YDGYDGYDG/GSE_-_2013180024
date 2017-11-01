@@ -42,7 +42,6 @@ void RenderScene(void)
 			g_SceneMgr->GetObjectStats(i)->colorA );
 	}
 	g_SceneMgr->Update(elapsedTime);
-
 	glutSwapBuffers();
 }
 
@@ -60,7 +59,7 @@ void MouseInput(int button, int state, int x, int y)
 {
 	//RenderScene();
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-		g_SceneMgr->AddObject(x-250, 250-y, 0);
+		g_SceneMgr->AddObject(x-250, 250-y, 0, OBJECT_CHARACTER);
 	}
 }
 
@@ -77,6 +76,7 @@ void SpecialKeyInput(int key, int x, int y)
 int main(int argc, char **argv)
 {
 	// Initialize GL things
+	srand(time(NULL));
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(0, 0);
@@ -96,6 +96,7 @@ int main(int argc, char **argv)
 	// Initialize Renderer
 	g_Renderer = new Renderer(500, 500);
 	g_SceneMgr = new SceneMgr();
+	g_SceneMgr->AddObject(0, 0, 0, OBJECT_BUILDING);
 
 	if (!g_Renderer->IsInitialized())
 	{
@@ -112,9 +113,8 @@ int main(int argc, char **argv)
 	glutMainLoop();
 
 	delete g_Renderer;
-	for (int i = 0; i < g_SceneMgr->CountObject(); i++) {
-		g_SceneMgr->DeleteObject(i);
-	}
+	g_SceneMgr->DeleteObject();
+
 
     return 0;
 }
