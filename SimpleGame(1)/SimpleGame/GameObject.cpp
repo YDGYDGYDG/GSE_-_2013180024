@@ -4,6 +4,25 @@
 
 GameObject::GameObject()
 {
+	objectDrawFlag = false;
+	speed = 0;
+	dirX = 0;
+	dirY = 0;
+	size = 0;
+	colorR = 0;
+	colorG = 0;
+	colorB = 0;
+	colorA = 0;
+	bb.leftBottom[0] = 0;
+	bb.leftBottom[1] = 0;
+	bb.rightTop[0] = 0;
+	bb.rightTop[1] = 0;
+	collisionCounter = false;
+	Life = false;
+	lifeTime = 0;
+	lifeCount = 0;
+	lifePower = 0;
+
 }
 
 
@@ -21,6 +40,7 @@ void GameObject::SettingPos(float x, float y, float z)
 void GameObject::Update(float elapsedTime) {
 
 	float elapsedTimeInSecond = elapsedTime / 1000.f;
+
 	posX = posX + (speed * dirX) * elapsedTimeInSecond;
 	posY = posY + (speed * dirY) * elapsedTimeInSecond;
 
@@ -66,6 +86,7 @@ void GameObject::SettingType(int objectType) {
 		Life = true;
 		lifeTime = 100;
 		lifeCount = 500;
+		lifePower = 500;
 		break;
 	case 1: //캐릭터
 		speed = 100;
@@ -87,6 +108,7 @@ void GameObject::SettingType(int objectType) {
 		Life = true;
 		lifeTime = 100;
 		lifeCount = 10;
+		lifePower = 10;
 		break;
 	case 2: //캐릭터의 총알
 		speed = 300;
@@ -105,6 +127,7 @@ void GameObject::SettingType(int objectType) {
 		Life = true;
 		lifeTime = 100;
 		lifeCount = 20;
+		lifePower = 20;
 		break;
 	case 3: //건물의 총알
 		speed = 100;
@@ -126,6 +149,7 @@ void GameObject::SettingType(int objectType) {
 		Life = true;
 		lifeTime = 100;
 		lifeCount = 10;
+		lifePower = 10;
 		break;
 	}
 }

@@ -10,6 +10,8 @@ public:
 	void SettingType(int objectType);
 	int GetType();
 
+	bool objectDrawFlag;
+
 	int type;
 
 	float posX;
@@ -29,6 +31,7 @@ public:
 	float colorA;
 
 	bool Life;
+	float lifePower;
 	float lifeTime;
 	float lifeCount;
 
@@ -42,6 +45,9 @@ public:
 	boundingBox bb;
 	bool collisionCounter = false;
 	bool collisionCheck = false;
+
+private:
+
 };
 
 

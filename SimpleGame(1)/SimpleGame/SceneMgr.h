@@ -26,7 +26,6 @@ public:
 	void DeleteObject(); //모든 객체 삭제
 	GameObject* GetObjectStats(int index); //n번째 객체정보 리턴
 	GameObject** GetObjectStats(); //모든 객체정보 리턴
-	int CountObject(); //객체 개수 리턴
 	void Update(float elapsedTime); 
 	void DeleteDeadObject(); //n번째 객체 삭제
 	void DrawObjects();
@@ -34,8 +33,6 @@ public:
 private:
 	bool Collision(GameObject a, GameObject b); //충돌
 	GameObject* m_gameObject[MAX_OBJECTS_COUNT];
-	GameObject* m_gameObject_building[MAX_OBJECTS_COUNT];
-	GameObject* m_gameObject_character[MAX_OBJECTS_COUNT];
 	Renderer *m_renderer;
 };
 
