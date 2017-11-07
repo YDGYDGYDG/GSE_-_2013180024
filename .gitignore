@@ -1,6 +1,6 @@
 *.idb
 *.pch
-*.odj
+*.obj
 *.log
 *.exe
 *.pdb
