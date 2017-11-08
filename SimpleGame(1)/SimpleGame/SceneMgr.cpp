@@ -60,11 +60,38 @@ void SceneMgr::DrawObjects()
 void SceneMgr::AddObject(int x, int y, int z, int type)
 {
 	for (int i = 0; i < MAX_OBJECTS_COUNT; i++) {
-		if (m_gameObject[i]->objectDrawFlag == false) {
-			m_gameObject[i]->objectDrawFlag = true;
+		if (m_gameObject[i]->objectDrawFlag == false) { //지금 안보이고 있는 오브젝트 공간을 찾아
 			m_gameObject[i]->SettingType(type);
 			m_gameObject[i]->SettingPos(x, y, z);
-			objectCounter++;
+			switch (m_gameObject[i]->type) //갯수 조절
+			{
+			case OBJECT_BUILDING:
+				if (buildingCounter < MAX_BUILDINGS_COUNT) {
+					buildingCounter++;
+					m_gameObject[i]->objectDrawFlag = true;
+				}
+				break;
+			case OBJECT_CHARACTER:
+				if (characterCounter < MAX_CHARACTERS_COUNT) {
+				characterCounter++;
+				m_gameObject[i]->objectDrawFlag = true;
+				}
+				break;
+			case OBJECT_ARROW:
+				if (arrowCounter < MAX_ARROWS_COUNT) {
+					arrowCounter++;
+					m_gameObject[i]->objectDrawFlag = true;
+				}
+				break;
+			case OBJECT_BULLET:
+				if (bulletCounter < MAX_BULLETS_COUNT) {
+					bulletCounter++;
+					m_gameObject[i]->objectDrawFlag = true;
+				}
+				break;
+			default:
+				break;
+			}
 			break;
 		}
 	}
@@ -108,7 +135,7 @@ void SceneMgr::Update(float elapsedTime)
 					if (m_gameObject[i]->collisionCheck == false || m_gameObject[j]->collisionCheck == false) { // 마주친 둘 중 하나라도 충돌 중이 아니었다면
 						m_gameObject[i]->lifeCount -= m_gameObject[j]->attackPower; // 서로의 공격력만큼 각각 생명력 감소
 						m_gameObject[j]->lifeCount -= m_gameObject[i]->attackPower;
-						std::cout << m_gameObject[i]->lifeCount;
+						//std::cout << m_gameObject[i]->lifeCount;
 					}
 					m_gameObject[i]->collisionCheck = true; //충돌중이에요~
 					m_gameObject[j]->collisionCheck = true; //얘랑요
@@ -141,18 +168,18 @@ void SceneMgr::Update(float elapsedTime)
 				}
 			}
 			//캐릭터 - 캐릭터총알간 충돌 (자기 것이면 맞으면 안 됀다)
-			if ((m_gameObject[i]->type == OBJECT_CHARACTER && m_gameObject[j]->type == OBJECT_BULLET) || (m_gameObject[i]->type == OBJECT_BULLET && m_gameObject[j]->type == OBJECT_CHARACTER)) {
-				if (Collision(*m_gameObject[i], *m_gameObject[j]) == true) {
-					m_gameObject[i]->collisionCounter = true;
-					m_gameObject[j]->collisionCounter = true;
-					if (m_gameObject[i]->collisionCheck == false || m_gameObject[j]->collisionCheck == false) { // 마주친 둘 중 하나라도 충돌 중이 아니었다면
-						m_gameObject[i]->lifeCount -= m_gameObject[j]->attackPower; // 서로의 공격력만큼 각각 생명력 감소
-						m_gameObject[j]->lifeCount -= m_gameObject[i]->attackPower;
-					}
-					m_gameObject[i]->collisionCheck = true; //충돌중이에요~
-					m_gameObject[j]->collisionCheck = true; //얘랑요
-				}
-			}
+			//if ((m_gameObject[i]->type == OBJECT_CHARACTER && m_gameObject[j]->type == OBJECT_BULLET) || (m_gameObject[i]->type == OBJECT_BULLET && m_gameObject[j]->type == OBJECT_CHARACTER)) {
+			//	if (Collision(*m_gameObject[i], *m_gameObject[j]) == true) {
+			//		m_gameObject[i]->collisionCounter = true;
+			//		m_gameObject[j]->collisionCounter = true;
+			//		if (m_gameObject[i]->collisionCheck == false || m_gameObject[j]->collisionCheck == false) { // 마주친 둘 중 하나라도 충돌 중이 아니었다면
+			//			m_gameObject[i]->lifeCount -= m_gameObject[j]->attackPower; // 서로의 공격력만큼 각각 생명력 감소
+			//			m_gameObject[j]->lifeCount -= m_gameObject[i]->attackPower;
+			//		}
+			//		m_gameObject[i]->collisionCheck = true; //충돌중이에요~
+			//		m_gameObject[j]->collisionCheck = true; //얘랑요
+			//	}
+			//}
 
 		}
 		if (m_gameObject[i]->collisionCounter == false) {
@@ -180,8 +207,6 @@ bool SceneMgr::Collision(GameObject a, GameObject b) {
 }
 
 void SceneMgr::CreateBullet(float elapsedTime) {
-	//std::cout << elapsedTime << std::endl;
-	std::cout << m_gameObject[0]->fireBulletCool << std::endl;
 
 	float coolTime = elapsedTime / 1000.f;
 
@@ -213,7 +238,24 @@ void SceneMgr::DeleteDeadObject() {
 	for (int i = 0; i < MAX_OBJECTS_COUNT; i++) {
 		if (m_gameObject[i]->lifeCount <= 0) {
 			m_gameObject[i]->objectDrawFlag = false;
-			objectCounter--;
+			switch (m_gameObject[i]->type)
+			{
+			case OBJECT_BUILDING:
+				buildingCounter--;
+				break;
+			case OBJECT_CHARACTER:
+				characterCounter--;
+				break;
+			case OBJECT_ARROW:
+				arrowCounter--;
+				break;
+			case OBJECT_BULLET:
+				bulletCounter--;
+				break;
+			default:
+				break;
+			}
+
 		}
 	}
 }
