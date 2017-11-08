@@ -1,1 +1,8 @@
-﻿
+﻿  GameObject.cpp
+c:\users\tlsao\onedrive\대학\게임소프트웨어공학\gse_2_-_2013180024-master\gse_2_-_2013180024\simplegame(1)\simplegame\gameobject.cpp(93): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\tlsao\onedrive\대학\게임소프트웨어공학\gse_2_-_2013180024-master\gse_2_-_2013180024\simplegame(1)\simplegame\gameobject.cpp(94): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\tlsao\onedrive\대학\게임소프트웨어공학\gse_2_-_2013180024-master\gse_2_-_2013180024\simplegame(1)\simplegame\gameobject.cpp(115): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\tlsao\onedrive\대학\게임소프트웨어공학\gse_2_-_2013180024-master\gse_2_-_2013180024\simplegame(1)\simplegame\gameobject.cpp(116): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\tlsao\onedrive\대학\게임소프트웨어공학\gse_2_-_2013180024-master\gse_2_-_2013180024\simplegame(1)\simplegame\gameobject.cpp(137): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\tlsao\onedrive\대학\게임소프트웨어공학\gse_2_-_2013180024-master\gse_2_-_2013180024\simplegame(1)\simplegame\gameobject.cpp(138): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  SimpleGame.vcxproj -> C:\Users\tlsao\OneDrive\대학\게임소프트웨어공학\GSE_2_-_2013180024-master\GSE_2_-_2013180024\SimpleGame(1)\x64\Debug\SimpleGame.exe
