@@ -22,7 +22,7 @@ GameObject::GameObject()
 	lifeTime = 0;
 	lifeCount = 0;
 	attackPower = 0;
-
+	fireBulletCool = 0;
 }
 
 
@@ -53,8 +53,6 @@ void GameObject::Update(float elapsedTime) {
 	bb.leftBottom[1] = posY - (size / 2);
 	bb.rightTop[0] = posX + (size / 2);
 	bb.rightTop[1] = posY + (size / 2);
-
-	fireBulletCool += elapsedTimeInSecond;
 
 	//lifeTime--;
 

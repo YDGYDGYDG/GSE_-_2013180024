@@ -87,33 +87,16 @@ GameObject** SceneMgr::GetObjectStats()
 
 void SceneMgr::Update(float elapsedTime)
 {
-	std::cout << m_gameObject[0]->fireBulletCool;
+	CreateBullet(elapsedTime);
 
 	for (int i = 0; i < MAX_OBJECTS_COUNT; i++) {
+		m_gameObject[i]->Update(elapsedTime);
 		if (m_gameObject[i]->objectDrawFlag == false) {
 			m_gameObject[i]->SettingType(0);
 		}
 		m_gameObject[i]->collisionCounter = false;
 	}
 
-	for (int i = 0; i < MAX_OBJECTS_COUNT; i++) {
-		m_gameObject[i]->Update(elapsedTime);
-		if (m_gameObject[i]->GetType() == OBJECT_BUILDING) {
-			if (m_gameObject[i]->fireBulletCool > 5) {
-				AddObject(m_gameObject[i]->posX, m_gameObject[i]->posY, m_gameObject[i]->posZ, OBJECT_ARROW);
-				m_gameObject[i]->fireBulletCool = 0;
-			}
-		}
-	}
-	for (int i = 0; i < MAX_OBJECTS_COUNT; i++) {
-		m_gameObject[i]->Update(elapsedTime);
-		if (m_gameObject[i]->GetType() == OBJECT_CHARACTER) {
-			if (m_gameObject[i]->fireBulletCool > 5) {
-				AddObject(m_gameObject[i]->posX, m_gameObject[i]->posY, m_gameObject[i]->posZ, OBJECT_BULLET);
-				m_gameObject[i]->fireBulletCool = 0;
-			}
-		}
-	}
 
 	for (int i = 0; i < MAX_OBJECTS_COUNT; i++) {
 		for (int j = i+1; j < MAX_OBJECTS_COUNT-1; j++) {
@@ -195,6 +178,36 @@ bool SceneMgr::Collision(GameObject a, GameObject b) {
 	else 
 	{ return false; }
 }
+
+void SceneMgr::CreateBullet(float elapsedTime) {
+	//std::cout << elapsedTime << std::endl;
+	std::cout << m_gameObject[0]->fireBulletCool << std::endl;
+
+	float coolTime = elapsedTime / 1000.f;
+
+	for (int i = 0; i < MAX_OBJECTS_COUNT; i++) {
+		m_gameObject[i]->fireBulletCool += coolTime;
+	}
+
+	for (int i = 0; i < MAX_OBJECTS_COUNT; i++) {
+		if (m_gameObject[i]->GetType() == OBJECT_BUILDING) {
+			if (m_gameObject[i]->fireBulletCool > 0.5) {
+				AddObject(m_gameObject[i]->posX, m_gameObject[i]->posY, m_gameObject[i]->posZ, OBJECT_ARROW);
+				m_gameObject[i]->fireBulletCool = 0;
+			}
+		}
+	}
+	for (int i = 0; i < MAX_OBJECTS_COUNT; i++) {
+		if (m_gameObject[i]->GetType() == OBJECT_CHARACTER) {
+			if (m_gameObject[i]->fireBulletCool > 0.5) {
+				AddObject(m_gameObject[i]->posX, m_gameObject[i]->posY, m_gameObject[i]->posZ, OBJECT_BULLET);
+				m_gameObject[i]->fireBulletCool = 0;
+			}
+		}
+	}
+
+}
+
 
 void SceneMgr::DeleteDeadObject() {
 	for (int i = 0; i < MAX_OBJECTS_COUNT; i++) {

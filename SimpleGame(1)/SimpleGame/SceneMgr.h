@@ -29,6 +29,7 @@ public:
 	void Update(float elapsedTime); 
 	void DeleteDeadObject(); //n번째 객체 삭제
 	void DrawObjects();
+	void CreateBullet(float elapsedTime);
 
 private:
 	bool Collision(GameObject a, GameObject b); //충돌

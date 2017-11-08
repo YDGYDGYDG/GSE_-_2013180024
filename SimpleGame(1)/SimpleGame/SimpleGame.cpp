@@ -17,6 +17,9 @@ but WITHOUT ANY WARRANTY.
 #include "GameObject.h"
 #include "SceneMgr.h"
 
+#define WINDOW_WIDTH 500
+#define WINDOW_HEIGHT 500
+
 SceneMgr *g_SceneMgr = NULL;
 float g_prevTime = 0;
 
@@ -29,7 +32,7 @@ void RenderScene(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0f, 0.2f, 0.2f, 1.0f);
 
-	g_SceneMgr->Update(elapsedTime);
+	g_SceneMgr->Update((float)elapsedTime);
 	g_SceneMgr->DrawObjects();
 
 	glutSwapBuffers();
@@ -49,7 +52,7 @@ void MouseInput(int button, int state, int x, int y)
 {
 	//RenderScene();
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-		g_SceneMgr->AddObject(x-250, 250-y, 0, OBJECT_CHARACTER);
+		g_SceneMgr->AddObject(x - (WINDOW_WIDTH / 2), (WINDOW_HEIGHT / 2) - y, 0, OBJECT_CHARACTER);
 	}
 }
 
@@ -70,7 +73,7 @@ int main(int argc, char **argv)
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(0, 0);
-	glutInitWindowSize(500, 500);
+	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	glutCreateWindow("Game Software Engineering KPU");
 
 	glewInit();
