@@ -93,7 +93,7 @@ void GameObject::SettingType(int objectType) {
 		if (dirX == 0 && dirY == 0) {
 			dirX++; dirY++;
 		}
-		size = 10;
+		size = 30;
 		colorR = 1;
 		colorG = 1;
 		colorB = 1;

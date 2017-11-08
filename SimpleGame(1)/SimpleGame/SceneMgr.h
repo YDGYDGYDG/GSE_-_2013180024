@@ -41,5 +41,6 @@ private:
 	Renderer *m_renderer;
 
 	GLuint m_texCharacter;
+	GLuint m_texBuilding;
 };
 

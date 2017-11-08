@@ -6,7 +6,8 @@
 SceneMgr::SceneMgr()
 {
 	m_renderer = new Renderer(500,500);
-	m_texCharacter = m_renderer->CreatePngTexture("../Resource/Enemy.png");
+	m_texCharacter = m_renderer->CreatePngTexture("../Resource/Bloodtrail.png");
+	m_texBuilding = m_renderer->CreatePngTexture("../Resource/Illuminati.png");
 	for (int i = 0; i < MAX_OBJECTS_COUNT; i++) {
 		m_gameObject[i] = new GameObject();
 	}
@@ -27,8 +28,8 @@ void SceneMgr::DrawObjects()
 		if (m_gameObject[i] != NULL && m_gameObject[i]->objectDrawFlag == true)
 		{
 			// Renderer Test
-			if (m_gameObject[i]->type != OBJECT_BUILDING) {
-				m_renderer->DrawSolidRect(
+			if (m_gameObject[i]->type == OBJECT_BUILDING) {
+				m_renderer->DrawTexturedRect(
 					m_gameObject[i]->posX,
 					m_gameObject[i]->posY,
 					m_gameObject[i]->posZ,
@@ -36,10 +37,11 @@ void SceneMgr::DrawObjects()
 					m_gameObject[i]->colorR,
 					m_gameObject[i]->colorG,
 					m_gameObject[i]->colorB,
-					m_gameObject[i]->colorA
-					);
+					m_gameObject[i]->colorA,
+					m_texBuilding
+				);
 			}
-			else {
+			else if (m_gameObject[i]->type == OBJECT_CHARACTER) {
 				m_renderer->DrawTexturedRect(
 					m_gameObject[i]->posX,
 					m_gameObject[i]->posY,
@@ -50,6 +52,18 @@ void SceneMgr::DrawObjects()
 					m_gameObject[i]->colorB,
 					m_gameObject[i]->colorA,
 					m_texCharacter
+				);
+			}
+			else {
+				m_renderer->DrawSolidRect(
+					m_gameObject[i]->posX,
+					m_gameObject[i]->posY,
+					m_gameObject[i]->posZ,
+					m_gameObject[i]->size,
+					m_gameObject[i]->colorR,
+					m_gameObject[i]->colorG,
+					m_gameObject[i]->colorB,
+					m_gameObject[i]->colorA
 				);
 			}
 		}
