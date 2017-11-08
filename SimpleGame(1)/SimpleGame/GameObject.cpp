@@ -21,7 +21,7 @@ GameObject::GameObject()
 	Life = false;
 	lifeTime = 0;
 	lifeCount = 0;
-	lifePower = 0;
+	attackPower = 0;
 
 }
 
@@ -54,7 +54,7 @@ void GameObject::Update(float elapsedTime) {
 	bb.rightTop[0] = posX + (size / 2);
 	bb.rightTop[1] = posY + (size / 2);
 
-	fireBulletCool = 10*elapsedTimeInSecond;
+	fireBulletCool += elapsedTime;
 
 	//lifeTime--;
 
@@ -69,7 +69,7 @@ void GameObject::Update(float elapsedTime) {
 void GameObject::SettingType(int objectType) {
 	type = objectType;
 	switch (objectType) {
-	case 0: //건물
+	case 1: //건물
 		speed = 0;
 		dirX = 0;
 		dirY = 0;
@@ -77,7 +77,7 @@ void GameObject::SettingType(int objectType) {
 		colorR = 1;
 		colorG = 1;
 		colorB = 0;
-		colorA = 100;
+		colorA = 1;
 		bb.leftBottom[0] = posX - (size / 2);
 		bb.leftBottom[1] = posY - (size / 2);
 		bb.rightTop[0] = posX + (size / 2);
@@ -86,12 +86,12 @@ void GameObject::SettingType(int objectType) {
 		Life = true;
 		lifeTime = 100;
 		lifeCount = 500;
-		lifePower = 500;
+		attackPower = 500;
 		break;
-	case 1: //캐릭터
+	case 2: //캐릭터
 		speed = 100;
-		dirX = rand() % 2 - 1;
-		dirY = rand() % 2 - 1;
+		dirX = rand() % 3 - 1;
+		dirY = rand() % 3 - 1;
 		if (dirX == 0 && dirY == 0) {
 			dirX++; dirY++;
 		}
@@ -99,7 +99,7 @@ void GameObject::SettingType(int objectType) {
 		colorR = 1;
 		colorG = 1;
 		colorB = 1;
-		colorA = 100;
+		colorA = 0.5;
 		bb.leftBottom[0] = posX - (size / 2);
 		bb.leftBottom[1] = posY - (size / 2);
 		bb.rightTop[0] = posX + (size / 2);
@@ -108,17 +108,20 @@ void GameObject::SettingType(int objectType) {
 		Life = true;
 		lifeTime = 100;
 		lifeCount = 10;
-		lifePower = 10;
+		attackPower = 10;
 		break;
-	case 2: //캐릭터의 총알
+	case 3: //캐릭터의 총알
 		speed = 300;
-		dirX = 1;
-		dirY = 1;
+		dirX = rand() % 3 - 1;
+		dirY = rand() % 3 - 1;
+		if (dirX == 0 && dirY == 0) {
+			dirX++; dirY++;
+		}
 		size = 2;
 		colorR = 1;
 		colorG = 0;
 		colorB = 0;
-		colorA = 100;
+		colorA = 1;
 		bb.leftBottom[0] = posX - (size / 2);
 		bb.leftBottom[1] = posY - (size / 2);
 		bb.rightTop[0] = posX + (size / 2);
@@ -126,13 +129,13 @@ void GameObject::SettingType(int objectType) {
 		collisionCounter = false;
 		Life = true;
 		lifeTime = 100;
-		lifeCount = 20;
-		lifePower = 20;
+		lifeCount = 10;
+		attackPower = 10;
 		break;
-	case 3: //건물의 총알
+	case 4: //건물의 총알
 		speed = 100;
-		dirX = rand() % 2 - 1;
-		dirY = rand() % 2 - 1;
+		dirX = rand() % 3 - 1;
+		dirY = rand() % 3 - 1;
 		if (dirX == 0 && dirY == 0) {
 			dirX++; dirY++;
 		}
@@ -140,7 +143,7 @@ void GameObject::SettingType(int objectType) {
 		colorR = 0;
 		colorG = 1;
 		colorB = 0;
-		colorA = 100;
+		colorA = 1;
 		bb.leftBottom[0] = posX - (size / 2);
 		bb.leftBottom[1] = posY - (size / 2);
 		bb.rightTop[0] = posX + (size / 2);
@@ -149,7 +152,7 @@ void GameObject::SettingType(int objectType) {
 		Life = true;
 		lifeTime = 100;
 		lifeCount = 10;
-		lifePower = 10;
+		attackPower = 10;
 		break;
 	}
 }

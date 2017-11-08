@@ -9,10 +9,10 @@
 #define MAX_ARROWS_COUNT 50
 #define MAX_OBJECTS_COUNT (MAX_BUILDINGS_COUNT+MAX_CHARACTERS_COUNT+MAX_BULLETS_COUNT+MAX_ARROWS_COUNT +1)
 //오브젝트 타입
-#define OBJECT_BUILDING 0
-#define OBJECT_CHARACTER 1
-#define OBJECT_BULLET 2
-#define OBJECT_ARROW 3
+#define OBJECT_BUILDING 1
+#define OBJECT_CHARACTER 2
+#define OBJECT_BULLET 3
+#define OBJECT_ARROW 4
 
 class SceneMgr
 {
@@ -34,5 +34,7 @@ private:
 	bool Collision(GameObject a, GameObject b); //충돌
 	GameObject* m_gameObject[MAX_OBJECTS_COUNT];
 	Renderer *m_renderer;
+
+	GLuint m_texCharacter;
 };
 

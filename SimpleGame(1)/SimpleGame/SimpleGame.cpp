@@ -27,7 +27,7 @@ void RenderScene(void)
 	g_prevTime = currentTime;
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
+	glClearColor(0.0f, 0.2f, 0.2f, 1.0f);
 
 	g_SceneMgr->Update(elapsedTime);
 	g_SceneMgr->DrawObjects();
@@ -84,6 +84,7 @@ int main(int argc, char **argv)
 	}
 
 	// Initialize Renderer
+
 	g_SceneMgr = new SceneMgr();
 	g_SceneMgr->AddObject(0, 0, 0, OBJECT_BUILDING);
 

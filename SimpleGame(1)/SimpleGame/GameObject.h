@@ -31,7 +31,7 @@ public:
 	float colorA;
 
 	bool Life;
-	float lifePower;
+	float attackPower;
 	float lifeTime;
 	float lifeCount;
 
