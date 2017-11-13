@@ -8,7 +8,6 @@ public:
 	void SettingPos(float x, float y, float z);
 	void Update(float elapsedTime);
 	void SettingType(int objectType);
-	int GetType();
 
 	bool objectDrawFlag;
 
@@ -43,7 +42,6 @@ public:
 	}boundingBox;
 
 	boundingBox bb;
-	bool collisionCounter = false;
 	bool collisionCheck = false;
 
 private:

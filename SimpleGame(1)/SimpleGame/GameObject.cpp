@@ -17,7 +17,6 @@ GameObject::GameObject()
 	bb.leftBottom[1] = 0;
 	bb.rightTop[0] = 0;
 	bb.rightTop[1] = 0;
-	collisionCounter = false;
 	Life = false;
 	lifeTime = 0;
 	lifeCount = 0;
@@ -80,7 +79,6 @@ void GameObject::SettingType(int objectType) {
 		bb.leftBottom[1] = posY - (size / 2);
 		bb.rightTop[0] = posX + (size / 2);
 		bb.rightTop[1] = posY + (size / 2);
-		collisionCounter = false;
 		Life = true;
 		lifeTime = 100;
 		lifeCount = 500;
@@ -102,7 +100,6 @@ void GameObject::SettingType(int objectType) {
 		bb.leftBottom[1] = posY - (size / 2);
 		bb.rightTop[0] = posX + (size / 2);
 		bb.rightTop[1] = posY + (size / 2);
-		collisionCounter = false;
 		Life = true;
 		lifeTime = 100;
 		lifeCount = 10;
@@ -124,7 +121,6 @@ void GameObject::SettingType(int objectType) {
 		bb.leftBottom[1] = posY - (size / 2);
 		bb.rightTop[0] = posX + (size / 2);
 		bb.rightTop[1] = posY + (size / 2);
-		collisionCounter = false;
 		Life = true;
 		lifeTime = 100;
 		lifeCount = 10;
@@ -146,7 +142,6 @@ void GameObject::SettingType(int objectType) {
 		bb.leftBottom[1] = posY - (size / 2);
 		bb.rightTop[0] = posX + (size / 2);
 		bb.rightTop[1] = posY + (size / 2);
-		collisionCounter = false;
 		Life = true;
 		lifeTime = 100;
 		lifeCount = 10;
@@ -155,8 +150,4 @@ void GameObject::SettingType(int objectType) {
 	}
 }
 
-
-int GameObject::GetType() {
-	return type;
-}
 
