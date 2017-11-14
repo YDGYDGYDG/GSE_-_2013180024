@@ -22,6 +22,7 @@ GameObject::GameObject()
 	lifeCount = 0;
 	attackPower = 0;
 	fireBulletCool = 0;
+	master = -1;
 }
 
 

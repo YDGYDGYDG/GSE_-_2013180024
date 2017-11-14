@@ -26,7 +26,7 @@ public:
 	int bulletCounter = 0;
 
 
-	void AddObject(int x, int y, int z, int type); //按眉积己
+	void AddObject(int x, int y, int z, int type, int master); //按眉积己
 	void DeleteObject(); //葛电 按眉 昏力
 	GameObject* GetObjectStats(int index); //n锅掳 按眉沥焊 府畔
 	GameObject** GetObjectStats(); //葛电 按眉沥焊 府畔

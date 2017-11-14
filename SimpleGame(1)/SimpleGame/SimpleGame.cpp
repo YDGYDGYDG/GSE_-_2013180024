@@ -52,7 +52,7 @@ void MouseInput(int button, int state, int x, int y)
 {
 	//RenderScene();
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-		g_SceneMgr->AddObject(x - (WINDOW_WIDTH / 2), (WINDOW_HEIGHT / 2) - y, 0, OBJECT_CHARACTER);
+		g_SceneMgr->AddObject(x - (WINDOW_WIDTH / 2), (WINDOW_HEIGHT / 2) - y, 0, OBJECT_CHARACTER, -1);
 	}
 }
 
@@ -89,7 +89,7 @@ int main(int argc, char **argv)
 	// Initialize Renderer
 
 	g_SceneMgr = new SceneMgr();
-	g_SceneMgr->AddObject(0, 0, 0, OBJECT_BUILDING);
+	g_SceneMgr->AddObject(0, 0, 0, OBJECT_BUILDING, -1);
 
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);
