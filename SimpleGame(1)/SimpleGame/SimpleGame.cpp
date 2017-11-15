@@ -17,8 +17,6 @@ but WITHOUT ANY WARRANTY.
 #include "GameObject.h"
 #include "SceneMgr.h"
 
-#define WINDOW_WIDTH 500
-#define WINDOW_HEIGHT 500
 
 SceneMgr *g_SceneMgr = NULL;
 float g_prevTime = 0;
@@ -30,10 +28,16 @@ void RenderScene(void)
 	g_prevTime = currentTime;
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.0f, 0.2f, 0.2f, 1.0f);
+	glClearColor(0.0f, 0.1f, 0.1f, 1.0f);
 
 	g_SceneMgr->Update((float)elapsedTime);
 	g_SceneMgr->DrawObjects();
+
+	//glColor3f(1.f, 1.f, 1.f);
+	//glBegin(GL_LINE);
+	//glVertex3f(-WINDOW_WIDTH / 2, 0, 0);
+	//glVertex3f(WINDOW_WIDTH / 2, 0, 0);
+	//glEnd();
 
 	glutSwapBuffers();
 }
@@ -52,7 +56,8 @@ void MouseInput(int button, int state, int x, int y)
 {
 	//RenderScene();
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-		g_SceneMgr->AddObject(x - (WINDOW_WIDTH / 2), (WINDOW_HEIGHT / 2) - y, 0, OBJECT_CHARACTER, -1);
+		std::cout << x << ", " << y << std::endl;
+		g_SceneMgr->AddObject(x - (WINDOW_WIDTH / 2), (WINDOW_HEIGHT / 2) - y, 0, OBJECT_CHARACTER, -1, BLUE_TEAM);
 	}
 }
 
@@ -89,7 +94,12 @@ int main(int argc, char **argv)
 	// Initialize Renderer
 
 	g_SceneMgr = new SceneMgr();
-	g_SceneMgr->AddObject(0, 0, 0, OBJECT_BUILDING, -1);
+	g_SceneMgr->AddObject(0, 350, 0, OBJECT_BUILDING, -1, RED_TEAM);
+	g_SceneMgr->AddObject(-120, 300, 0, OBJECT_BUILDING, -1, RED_TEAM);
+	g_SceneMgr->AddObject(120, 300, 0, OBJECT_BUILDING, -1, RED_TEAM);
+	g_SceneMgr->AddObject(0, -350, 0, OBJECT_BUILDING, -1, BLUE_TEAM);
+	g_SceneMgr->AddObject(-120, -300, 0, OBJECT_BUILDING, -1, BLUE_TEAM);
+	g_SceneMgr->AddObject(120, -300, 0, OBJECT_BUILDING, -1, BLUE_TEAM);
 
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);

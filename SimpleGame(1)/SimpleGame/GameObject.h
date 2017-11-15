@@ -1,5 +1,8 @@
 #pragma once
 
+#define RED_TEAM 0
+#define BLUE_TEAM 1
+
 class GameObject
 {
 public:
@@ -8,10 +11,12 @@ public:
 	void SettingPos(float x, float y, float z);
 	void Update(float elapsedTime);
 	void SettingType(int objectType);
+	void SettingTeam(int objectTeam);
 	//그림여부
 	bool objectDrawFlag;
 	//타입
 	int type;
+	int team;
 	//위치
 	float posX;
 	float posY;

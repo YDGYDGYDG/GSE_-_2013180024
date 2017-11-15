@@ -44,10 +44,10 @@ void GameObject::Update(float elapsedTime) {
 	posX = posX + (speed * dirX) * elapsedTimeInSecond;
 	posY = posY + (speed * dirY) * elapsedTimeInSecond;
 
-	if (posX > 250.f) { dirX = -1; }
-	if (posX < -250.f) { dirX = 1; }
-	if (posY > 250.f) { dirY = -1; }
-	if (posY < -250.f) { dirY = 1; }
+	if (posX > WINDOW_WIDTH/2) { dirX = -1; }
+	if (posX < -WINDOW_WIDTH/2) { dirX = 1; }
+	if (posY > WINDOW_HEIGHT/2) { dirY = -1; }
+	if (posY < -WINDOW_HEIGHT/2) { dirY = 1; }
 
 	bb.leftBottom[0] = posX - (size / 2);
 	bb.leftBottom[1] = posY - (size / 2);
@@ -64,6 +64,10 @@ void GameObject::Update(float elapsedTime) {
 	}
 }
 
+void GameObject::SettingTeam(int objectTeam) { //SettingType보다 먼저 해야함
+	team = objectTeam;
+}
+
 void GameObject::SettingType(int objectType) {
 	type = objectType;
 	switch (objectType) {
@@ -71,9 +75,9 @@ void GameObject::SettingType(int objectType) {
 		speed = 0;
 		dirX = 0;
 		dirY = 0;
-		size = 50;
-		colorR = 1;
-		colorG = 1;
+		size = 100;
+		colorR = 0;
+		colorG = 0;
 		colorB = 0;
 		colorA = 1;
 		bb.leftBottom[0] = posX - (size / 2);
@@ -86,17 +90,24 @@ void GameObject::SettingType(int objectType) {
 		attackPower = 500;
 		break;
 	case 2: //캐릭터
-		speed = 100;
+		speed = 300;
 		dirX = rand() % 3 - 1;
 		dirY = rand() % 3 - 1;
 		if (dirX == 0 && dirY == 0) {
 			dirX++; dirY++;
 		}
-		size = 30;
-		colorR = 1;
-		colorG = 1;
-		colorB = 1;
-		colorA = 0.5;
+		size = 10;
+		if (team == RED_TEAM) {
+			colorR = 1;
+			colorG = 0;
+			colorB = 0;
+		}
+		else if (team == BLUE_TEAM) {
+			colorR = 0;
+			colorG = 0;
+			colorB = 1;
+		}
+		colorA = 1;
 		bb.leftBottom[0] = posX - (size / 2);
 		bb.leftBottom[1] = posY - (size / 2);
 		bb.rightTop[0] = posX + (size / 2);
@@ -107,16 +118,23 @@ void GameObject::SettingType(int objectType) {
 		attackPower = 10;
 		break;
 	case 3: //캐릭터의 총알
-		speed = 300;
+		speed = 600;
 		dirX = rand() % 3 - 1;
 		dirY = rand() % 3 - 1;
 		if (dirX == 0 && dirY == 0) {
 			dirX++; dirY++;
 		}
 		size = 2;
-		colorR = 1;
-		colorG = 0;
-		colorB = 0;
+		if (team == RED_TEAM) {
+			colorR = 1;
+			colorG = 0;
+			colorB = 0;
+		}
+		else if (team == BLUE_TEAM) {
+			colorR = 0;
+			colorG = 0;
+			colorB = 1;
+		}
 		colorA = 1;
 		bb.leftBottom[0] = posX - (size / 2);
 		bb.leftBottom[1] = posY - (size / 2);
@@ -135,9 +153,16 @@ void GameObject::SettingType(int objectType) {
 			dirX++; dirY++;
 		}
 		size = 2;
-		colorR = 0;
-		colorG = 1;
-		colorB = 0;
+		if (team == RED_TEAM) {
+			colorR = 1;
+			colorG = 0;
+			colorB = 1;
+		}
+		else if (team == BLUE_TEAM) {
+			colorR = 1;
+			colorG = 1;
+			colorB = 0;
+		}
 		colorA = 1;
 		bb.leftBottom[0] = posX - (size / 2);
 		bb.leftBottom[1] = posY - (size / 2);
