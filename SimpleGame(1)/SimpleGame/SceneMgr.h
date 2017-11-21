@@ -20,11 +20,12 @@ public:
 	SceneMgr();
 	~SceneMgr();
 
-	int buildingCounter = 0;
-	int characterCounter = 0;
-	int arrowCounter = 0;
-	int bulletCounter = 0;
-	float enemyResenCool = 0;
+	int buildingCounter;
+	int characterCounter;
+	int arrowCounter;
+	int bulletCounter;
+	float enemyResenCool;
+	float characterResenCool;
 
 	void AddObject(int x, int y, int z, int type, int master, int team); //按眉积己
 	void DeleteObject(); //葛电 按眉 昏力
@@ -35,6 +36,7 @@ public:
 	void DrawObjects();
 	void CreateBullet(float elapsedTime);
 	void CreateEnemyCharacter(float elapsedTime);
+	void CreateOurCharacter(float elapsedTime);
 
 private:
 	bool Collision(GameObject a, GameObject b); //面倒

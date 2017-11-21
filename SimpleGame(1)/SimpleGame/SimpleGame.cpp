@@ -38,6 +38,7 @@ void RenderScene(void)
 	//glVertex3f(-WINDOW_WIDTH / 2, 0, 0);
 	//glVertex3f(WINDOW_WIDTH / 2, 0, 0);
 	//glEnd();
+	std::cout << g_SceneMgr->characterResenCool << std::endl;
 
 	glutSwapBuffers();
 }
@@ -56,8 +57,11 @@ void MouseInput(int button, int state, int x, int y)
 {
 	//RenderScene();
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-		std::cout << x << ", " << y << std::endl;
-		g_SceneMgr->AddObject(x - (WINDOW_WIDTH / 2), (WINDOW_HEIGHT / 2) - y, 0, OBJECT_CHARACTER, -1, BLUE_TEAM);
+		//std::cout << x << ", " << y << std::endl;
+		if (y > (WINDOW_HEIGHT / 2) && g_SceneMgr->characterResenCool >= 2.0f) {
+			g_SceneMgr->AddObject(x - (WINDOW_WIDTH / 2), (WINDOW_HEIGHT / 2) - y, 0, OBJECT_CHARACTER, -1, BLUE_TEAM);
+			g_SceneMgr->characterResenCool = 0.f;
+		}
 	}
 }
 

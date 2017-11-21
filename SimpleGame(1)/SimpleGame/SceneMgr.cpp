@@ -11,6 +11,12 @@ SceneMgr::SceneMgr()
 	for (int i = 0; i < MAX_OBJECTS_COUNT; i++) {
 		m_gameObject[i] = new GameObject();
 	}
+	buildingCounter = 0;
+	characterCounter = 0;
+	arrowCounter = 0;
+	bulletCounter = 0;
+	enemyResenCool = 0;
+	characterResenCool = 0;
 }
 
 
@@ -133,6 +139,7 @@ void SceneMgr::Update(float elapsedTime)
 {
 	CreateBullet(elapsedTime);
 	CreateEnemyCharacter(elapsedTime);
+	CreateOurCharacter(elapsedTime);
 	for (int i = 0; i < MAX_OBJECTS_COUNT; i++) {
 		m_gameObject[i]->Update(elapsedTime);
 		if (m_gameObject[i]->objectDrawFlag == false) {
@@ -237,10 +244,15 @@ void SceneMgr::CreateEnemyCharacter(float elapsedTime) {
 	int X, Y;
 	X = rand() % WINDOW_WIDTH - (WINDOW_WIDTH / 2);
 	Y = rand() % (WINDOW_HEIGHT / 2);
-	if (enemyResenCool > 1.0) {
+	if (enemyResenCool >= 1.0f) {
 		AddObject(X, Y, 0, OBJECT_CHARACTER, -1, RED_TEAM);
 		enemyResenCool = 0;
 	}
+}
+
+void SceneMgr::CreateOurCharacter(float elapsedTime) {
+	float coolTime = elapsedTime / 1000.f;
+	characterResenCool += coolTime;
 }
 
 void SceneMgr::DeleteDeadObject() {
