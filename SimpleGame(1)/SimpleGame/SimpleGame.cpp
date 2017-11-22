@@ -29,16 +29,12 @@ void RenderScene(void)
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0f, 0.1f, 0.1f, 1.0f);
+	glClearDepth(1.f);
 
 	g_SceneMgr->Update((float)elapsedTime);
 	g_SceneMgr->DrawObjects();
 
-	//glColor3f(1.f, 1.f, 1.f);
-	//glBegin(GL_LINE);
-	//glVertex3f(-WINDOW_WIDTH / 2, 0, 0);
-	//glVertex3f(WINDOW_WIDTH / 2, 0, 0);
-	//glEnd();
-	std::cout << g_SceneMgr->characterResenCool << std::endl;
+	//std::cout << g_SceneMgr->characterResenCool << std::endl;
 
 	glutSwapBuffers();
 }
@@ -98,10 +94,10 @@ int main(int argc, char **argv)
 	// Initialize Renderer
 
 	g_SceneMgr = new SceneMgr();
-	g_SceneMgr->AddObject(0, 350, 0, OBJECT_BUILDING, -1, RED_TEAM);
+	g_SceneMgr->AddObject(0, 330, 0, OBJECT_BUILDING, -1, RED_TEAM);
 	g_SceneMgr->AddObject(-120, 300, 0, OBJECT_BUILDING, -1, RED_TEAM);
 	g_SceneMgr->AddObject(120, 300, 0, OBJECT_BUILDING, -1, RED_TEAM);
-	g_SceneMgr->AddObject(0, -350, 0, OBJECT_BUILDING, -1, BLUE_TEAM);
+	g_SceneMgr->AddObject(0, -330, 0, OBJECT_BUILDING, -1, BLUE_TEAM);
 	g_SceneMgr->AddObject(-120, -300, 0, OBJECT_BUILDING, -1, BLUE_TEAM);
 	g_SceneMgr->AddObject(120, -300, 0, OBJECT_BUILDING, -1, BLUE_TEAM);
 

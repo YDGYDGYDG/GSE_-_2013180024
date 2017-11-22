@@ -47,7 +47,7 @@ public:
 	}boundingBox;
 	boundingBox bb;
 	//面倒眉农
-	bool collisionCheck = false;
+	bool collisionCheck;
 	//面倒林牢
 	int master;
 

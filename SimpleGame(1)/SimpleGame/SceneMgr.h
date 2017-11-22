@@ -46,5 +46,7 @@ private:
 	GLuint m_texCharacter;
 	GLuint m_texRedTeamBuilding;
 	GLuint m_texBlueTeamBuilding;
+	GLuint m_texBlueTeamCharacter;
+	GLuint m_texRedTeamCharacter;
 };
 

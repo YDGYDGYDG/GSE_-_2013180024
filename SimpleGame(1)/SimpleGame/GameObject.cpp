@@ -5,6 +5,7 @@
 GameObject::GameObject()
 {
 	objectDrawFlag = false;
+	collisionCheck = false;
 	speed = 0;
 	dirX = 0;
 	dirY = 0;
@@ -44,10 +45,6 @@ void GameObject::Update(float elapsedTime) {
 	posX = posX + (speed * dirX) * elapsedTimeInSecond;
 	posY = posY + (speed * dirY) * elapsedTimeInSecond;
 
-	if (posX > WINDOW_WIDTH/2) { dirX = -1; }
-	if (posX < -WINDOW_WIDTH/2) { dirX = 1; }
-	if (posY > WINDOW_HEIGHT/2) { dirY = -1; }
-	if (posY < -WINDOW_HEIGHT/2) { dirY = 1; }
 
 	bb.leftBottom[0] = posX - (size / 2);
 	bb.leftBottom[1] = posY - (size / 2);
@@ -71,14 +68,34 @@ void GameObject::SettingTeam(int objectTeam) { //SettingType보다 먼저 해야함
 void GameObject::SettingType(int objectType) {
 	type = objectType;
 	switch (objectType) {
+	case 0:
+		collisionCheck = false;
+		speed = 0;
+		dirX = 0;
+		dirY = 0;
+		size = 0;
+		colorR = 0;
+		colorG = 0;
+		colorB = 0;
+		colorA = 0;
+		bb.leftBottom[0] = 0;
+		bb.leftBottom[1] = 0;
+		bb.rightTop[0] =   0;
+		bb.rightTop[1] =   0;
+		Life = false;
+		lifeTime = 0;
+		lifeCount = 0;
+		attackPower = 0;
+		break;
 	case 1: //건물
+		collisionCheck = false;
 		speed = 0;
 		dirX = 0;
 		dirY = 0;
 		size = 100;
-		colorR = 0;
-		colorG = 0;
-		colorB = 0;
+		colorR = 1;
+		colorG = 1;
+		colorB = 1;
 		colorA = 1;
 		bb.leftBottom[0] = posX - (size / 2);
 		bb.leftBottom[1] = posY - (size / 2);
@@ -87,26 +104,20 @@ void GameObject::SettingType(int objectType) {
 		Life = true;
 		lifeTime = 100;
 		lifeCount = 500;
-		attackPower = 500;
+		attackPower = 5;
 		break;
 	case 2: //캐릭터
+		collisionCheck = false;
 		speed = 300;
 		dirX = rand() % 3 - 1;
 		dirY = rand() % 3 - 1;
 		if (dirX == 0 && dirY == 0) {
 			dirX++; dirY++;
 		}
-		size = 10;
-		if (team == RED_TEAM) {
-			colorR = 1;
-			colorG = 0;
-			colorB = 0;
-		}
-		else if (team == BLUE_TEAM) {
-			colorR = 0;
-			colorG = 0;
-			colorB = 1;
-		}
+		size = 30;
+		colorR = 1;
+		colorG = 1;
+		colorB = 1;
 		colorA = 1;
 		bb.leftBottom[0] = posX - (size / 2);
 		bb.leftBottom[1] = posY - (size / 2);
@@ -118,13 +129,14 @@ void GameObject::SettingType(int objectType) {
 		attackPower = 10;
 		break;
 	case 3: //캐릭터의 총알
+		collisionCheck = false;
 		speed = 600;
 		dirX = rand() % 3 - 1;
 		dirY = rand() % 3 - 1;
 		if (dirX == 0 && dirY == 0) {
 			dirX++; dirY++;
 		}
-		size = 2;
+		size = 4;
 		if (team == RED_TEAM) {
 			colorR = 1;
 			colorG = 0;
@@ -146,13 +158,14 @@ void GameObject::SettingType(int objectType) {
 		attackPower = 10;
 		break;
 	case 4: //건물의 총알
+		collisionCheck = false;
 		speed = 100;
 		dirX = rand() % 3 - 1;
 		dirY = rand() % 3 - 1;
 		if (dirX == 0 && dirY == 0) {
 			dirX++; dirY++;
 		}
-		size = 2;
+		size = 4;
 		if (team == RED_TEAM) {
 			colorR = 1;
 			colorG = 0;
