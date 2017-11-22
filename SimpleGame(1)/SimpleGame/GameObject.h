@@ -48,6 +48,7 @@ public:
 	boundingBox bb;
 	//面倒眉农
 	bool collisionCheck;
+	bool damageCheck;
 	//面倒林牢
 	int master;
 

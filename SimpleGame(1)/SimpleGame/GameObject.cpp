@@ -6,6 +6,7 @@ GameObject::GameObject()
 {
 	objectDrawFlag = false;
 	collisionCheck = false;
+	damageCheck = false;
 	speed = 0;
 	dirX = 0;
 	dirY = 0;
@@ -70,6 +71,7 @@ void GameObject::SettingType(int objectType) {
 	switch (objectType) {
 	case 0:
 		collisionCheck = false;
+		damageCheck = false;
 		speed = 0;
 		dirX = 0;
 		dirY = 0;
@@ -89,6 +91,7 @@ void GameObject::SettingType(int objectType) {
 		break;
 	case 1: //건물
 		collisionCheck = false;
+		damageCheck = false;
 		speed = 0;
 		dirX = 0;
 		dirY = 0;
@@ -104,10 +107,11 @@ void GameObject::SettingType(int objectType) {
 		Life = true;
 		lifeTime = 100;
 		lifeCount = 500;
-		attackPower = 5;
+		attackPower = 500;
 		break;
 	case 2: //캐릭터
 		collisionCheck = false;
+		damageCheck = false;
 		speed = 300;
 		dirX = rand() % 3 - 1;
 		dirY = rand() % 3 - 1;
@@ -130,6 +134,7 @@ void GameObject::SettingType(int objectType) {
 		break;
 	case 3: //캐릭터의 총알
 		collisionCheck = false;
+		damageCheck = false;
 		speed = 600;
 		dirX = rand() % 3 - 1;
 		dirY = rand() % 3 - 1;
@@ -159,6 +164,7 @@ void GameObject::SettingType(int objectType) {
 		break;
 	case 4: //건물의 총알
 		collisionCheck = false;
+		damageCheck = false;
 		speed = 100;
 		dirX = rand() % 3 - 1;
 		dirY = rand() % 3 - 1;

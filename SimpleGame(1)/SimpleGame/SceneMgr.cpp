@@ -221,6 +221,7 @@ void SceneMgr::Update(float elapsedTime)
 		if (m_gameObject[i]->objectDrawFlag == false) {
 			m_gameObject[i]->SettingType(0);
 		}
+		m_gameObject[i]->collisionCheck = false; //충돌 초기화
 	}
 	for (int i = 0; i < MAX_OBJECTS_COUNT; i++) { // 화면 나간 총알은 체력 0
 		if (m_gameObject[i]->type == OBJECT_ARROW || m_gameObject[i]->type == OBJECT_BULLET) {
@@ -249,74 +250,79 @@ void SceneMgr::Update(float elapsedTime)
 				//건물 - 캐릭터간 충돌 
 				if ((m_gameObject[i]->type == OBJECT_BUILDING && m_gameObject[j]->type == OBJECT_CHARACTER) || (m_gameObject[i]->type == OBJECT_CHARACTER && m_gameObject[j]->type == OBJECT_BUILDING)) {
 					if (Collision(*m_gameObject[i], *m_gameObject[j]) == true) {
-						if (m_gameObject[i]->collisionCheck == false || m_gameObject[j]->collisionCheck == false) { // 마주친 둘 중 하나라도 충돌 중이 아니었다면
-							m_gameObject[i]->lifeCount -= m_gameObject[j]->attackPower; // 서로의 공격력만큼 각각 생명력 감소
-							m_gameObject[j]->lifeCount -= m_gameObject[i]->attackPower;
-							std::cout << m_gameObject[i]->collisionCheck << std::endl;
-							std::cout << m_gameObject[j]->collisionCheck << std::endl;
-							std::cout << "띠기" << std::endl;
-						}
 						m_gameObject[i]->collisionCheck = true; //충돌중이에요~
 						m_gameObject[j]->collisionCheck = true; //얘랑요
+						if (m_gameObject[i]->damageCheck == false || m_gameObject[j]->damageCheck == false) { // 마주친 둘 중 하나라도 충돌 중이 아니었다면
+							m_gameObject[i]->lifeCount -= m_gameObject[j]->attackPower; // 서로의 공격력만큼 각각 생명력 감소
+							m_gameObject[j]->lifeCount -= m_gameObject[i]->attackPower;
+							m_gameObject[i]->damageCheck = true;
+							m_gameObject[j]->damageCheck = true;
+							std::cout << m_gameObject[i]->lifeCount << std::endl;
+							std::cout << m_gameObject[j]->lifeCount << std::endl;
+							std::cout << "띠기" << std::endl;
+						}
 					}
 				}
 				//캐릭터 - 건물총알간 충돌
 				else if ((m_gameObject[i]->type == OBJECT_CHARACTER && m_gameObject[j]->type == OBJECT_ARROW) || (m_gameObject[i]->type == OBJECT_ARROW && m_gameObject[j]->type == OBJECT_CHARACTER)) {
 					if (Collision(*m_gameObject[i], *m_gameObject[j]) == true) {
-						if (m_gameObject[i]->collisionCheck == false || m_gameObject[j]->collisionCheck == false) { // 마주친 둘 중 하나라도 충돌 중이 아니었다면
-							m_gameObject[i]->lifeCount -= m_gameObject[j]->attackPower; // 서로의 공격력만큼 각각 생명력 감소
-							m_gameObject[j]->lifeCount -= m_gameObject[i]->attackPower;
-						}
 						m_gameObject[i]->collisionCheck = true; //충돌중이에요~
 						m_gameObject[j]->collisionCheck = true; //얘랑요
+						if (m_gameObject[i]->damageCheck == false || m_gameObject[j]->damageCheck == false) { // 마주친 둘 중 하나라도 충돌 중이 아니었다면
+							m_gameObject[i]->lifeCount -= m_gameObject[j]->attackPower; // 서로의 공격력만큼 각각 생명력 감소
+							m_gameObject[j]->lifeCount -= m_gameObject[i]->attackPower;
+							m_gameObject[i]->damageCheck = true;
+							m_gameObject[j]->damageCheck = true;
+						}
 					}
 				}
 				//건물 - 캐릭터총알간 충돌
 				else if ((m_gameObject[i]->type == OBJECT_BUILDING && m_gameObject[j]->type == OBJECT_BULLET) || (m_gameObject[i]->type == OBJECT_BULLET && m_gameObject[j]->type == OBJECT_BUILDING)) {
 					if (Collision(*m_gameObject[i], *m_gameObject[j]) == true) {
-						if (m_gameObject[i]->collisionCheck == false || m_gameObject[j]->collisionCheck == false) { // 마주친 둘 중 하나라도 충돌 중이 아니었다면
-							m_gameObject[i]->lifeCount -= m_gameObject[j]->attackPower; // 서로의 공격력만큼 각각 생명력 감소
-							m_gameObject[j]->lifeCount -= m_gameObject[i]->attackPower;
-						}
 						m_gameObject[i]->collisionCheck = true; //충돌중이에요~
 						m_gameObject[j]->collisionCheck = true; //얘랑요
+						if (m_gameObject[i]->damageCheck == false || m_gameObject[j]->damageCheck == false) { // 마주친 둘 중 하나라도 충돌 중이 아니었다면
+							m_gameObject[i]->lifeCount -= m_gameObject[j]->attackPower; // 서로의 공격력만큼 각각 생명력 감소
+							m_gameObject[j]->lifeCount -= m_gameObject[i]->attackPower;
+							m_gameObject[i]->damageCheck = true;
+							m_gameObject[j]->damageCheck = true;
+						}
 					}
 				}
 				//캐릭터 - 캐릭터총알간 충돌 (자기 것이면 맞으면 안 됀다)
 				else if ((m_gameObject[i]->type == OBJECT_CHARACTER && m_gameObject[j]->type == OBJECT_BULLET) || (m_gameObject[i]->type == OBJECT_BULLET && m_gameObject[j]->type == OBJECT_CHARACTER)) {
 					if (Collision(*m_gameObject[i], *m_gameObject[j]) == true && i != m_gameObject[j]->master && j != m_gameObject[i]->master) { //총알의 주인이 아닌 경우에만 충돌
-						if (m_gameObject[i]->collisionCheck == false || m_gameObject[j]->collisionCheck == false) { // 마주친 둘 중 하나라도 충돌 중이 아니었다면
-							m_gameObject[i]->lifeCount -= m_gameObject[j]->attackPower; // 서로의 공격력만큼 각각 생명력 감소
-							m_gameObject[j]->lifeCount -= m_gameObject[i]->attackPower;
-						}
 						m_gameObject[i]->collisionCheck = true; //충돌중이에요~
 						m_gameObject[j]->collisionCheck = true; //얘랑요
+						if (m_gameObject[i]->damageCheck == false || m_gameObject[j]->damageCheck == false) { // 마주친 둘 중 하나라도 충돌 중이 아니었다면
+							m_gameObject[i]->lifeCount -= m_gameObject[j]->attackPower; // 서로의 공격력만큼 각각 생명력 감소
+							m_gameObject[j]->lifeCount -= m_gameObject[i]->attackPower;
+							m_gameObject[i]->damageCheck = true;
+							m_gameObject[j]->damageCheck = true;
+						}
 					}
 				}
 				//건물 - 건물총알간 충돌
 				else if ((m_gameObject[i]->type == OBJECT_BUILDING && m_gameObject[j]->type == OBJECT_ARROW) || (m_gameObject[i]->type == OBJECT_ARROW && m_gameObject[j]->type == OBJECT_BUILDING)) {
 					if (Collision(*m_gameObject[i], *m_gameObject[j]) == true) {
-						if (m_gameObject[i]->collisionCheck == false || m_gameObject[j]->collisionCheck == false) { // 마주친 둘 중 하나라도 충돌 중이 아니었다면
-							m_gameObject[i]->lifeCount -= m_gameObject[j]->attackPower; // 서로의 공격력만큼 각각 생명력 감소
-							m_gameObject[j]->lifeCount -= m_gameObject[i]->attackPower;
-						}
 						m_gameObject[i]->collisionCheck = true; //충돌중이에요~
 						m_gameObject[j]->collisionCheck = true; //얘랑요
+						if (m_gameObject[i]->damageCheck == false || m_gameObject[j]->damageCheck == false) { // 마주친 둘 중 하나라도 충돌 중이 아니었다면
+							m_gameObject[i]->lifeCount -= m_gameObject[j]->attackPower; // 서로의 공격력만큼 각각 생명력 감소
+							m_gameObject[j]->lifeCount -= m_gameObject[i]->attackPower;
+							m_gameObject[i]->damageCheck = true;
+							m_gameObject[j]->damageCheck = true;
+						}
 					}
 				}
 			}
 		}
 	}
 
-	//for (int i = 0; i < MAX_OBJECTS_COUNT; i++) { //아무랑도 충돌중이지 않은 애는 false가 된다
-	//	for (int j = 0; j < MAX_OBJECTS_COUNT; j++) {
-	//		if (m_gameObject[i]->team != m_gameObject[j]->team) {
-	//			if (Collision(*m_gameObject[i], *m_gameObject[j]) == false) {
-	//				
-	//			}
-	//		}
-	//	}
-	//}
+	for (int i = 0; i < MAX_OBJECTS_COUNT; i++) { //아무랑도 충돌중이지 않은 애는 데미지체크가 false가 된다
+		if(m_gameObject[i]->collisionCheck == false)
+			m_gameObject[i]->damageCheck = false;
+	}
 
 }
 
