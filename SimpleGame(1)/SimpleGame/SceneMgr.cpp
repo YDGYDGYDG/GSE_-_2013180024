@@ -6,9 +6,13 @@
 SceneMgr::SceneMgr()
 {
 	m_renderer = new Renderer(WINDOW_WIDTH, WINDOW_HEIGHT);
+	m_texBG = m_renderer->CreatePngTexture("../Resource/ChulkungChulkung.png");
+
+	m_texBlueTeamBuilding = m_renderer->CreatePngTexture("../Resource/Bibblethump1.png");
+	m_texBlueTeamCharacter = m_renderer->CreatePngTexture("../Resource/SonicRun.png");
+	m_texBlueTeamArrow = m_renderer->CreatePngTexture("../Resource/Voidball.png");
+
 	m_texRedTeamBuilding = m_renderer->CreatePngTexture("../Resource/Bloodtrail.png");
-	m_texBlueTeamBuilding = m_renderer->CreatePngTexture("../Resource/Bibblethump.png");
-	m_texBlueTeamCharacter = m_renderer->CreatePngTexture("../Resource/Illuminati.png");
 	m_texRedTeamCharacter = m_renderer->CreatePngTexture("../Resource/Butterfly.png");
 
 	for (int i = 0; i < MAX_OBJECTS_COUNT; i++) {
@@ -20,6 +24,9 @@ SceneMgr::SceneMgr()
 	bulletCounter = 0;
 	enemyResenCool = 0;
 	characterResenCool = 0;
+	characterAnimationStack = 0;
+	BuildingAnimationStack = 0;
+	BlueTeamArrowParticleTime = 0;
 }
 
 
@@ -30,9 +37,12 @@ SceneMgr::~SceneMgr()
 
 void SceneMgr::DrawObjects()
 {
+	//¹è°æ
+	m_renderer->DrawTexturedRect(0, 0, 0, WINDOW_HEIGHT, 1, 1, 1, 1, m_texBG, 0.9);
+
 	//Áß¾Ó¼±
-	for (int i = 0; i < 10; i++) { 
-		m_renderer->DrawSolidRect(i * 10, WINDOW_HEIGHT / 2, 0, 0, 1, 1, 1, 1.0, 0);
+	for (int i = 0; i < 50; i++) { 
+		m_renderer->DrawSolidRect((i * 10)-WINDOW_WIDTH/2, 0, 0, 1, 1, 1, 1, 1.0, 0.1);
 	}
 
 	for (int i = 0; i < MAX_OBJECTS_COUNT; i++)
@@ -51,7 +61,7 @@ void SceneMgr::DrawObjects()
 					m_gameObject[i]->colorB,
 					m_gameObject[i]->colorA,
 					m_texRedTeamBuilding, 
-					0
+					0.1
 				);
 				m_renderer->DrawSolidRectGauge(
 					m_gameObject[i]->posX,
@@ -61,11 +71,11 @@ void SceneMgr::DrawObjects()
 					10,
 					1, 0, 0, 1,
 					1,
-					0
+					0.1
 				);
 			}
 			else if (m_gameObject[i]->type == OBJECT_BUILDING && m_gameObject[i]->team == BLUE_TEAM) {
-				m_renderer->DrawTexturedRect(
+				m_renderer->DrawTexturedRectSeq(
 					m_gameObject[i]->posX,
 					m_gameObject[i]->posY,
 					m_gameObject[i]->posZ,
@@ -75,7 +85,8 @@ void SceneMgr::DrawObjects()
 					m_gameObject[i]->colorB,
 					m_gameObject[i]->colorA,
 					m_texBlueTeamBuilding,
-					0
+					BuildingAnimationStack,0,8,1,
+					0.1
 				);
 				m_renderer->DrawSolidRectGauge(
 					m_gameObject[i]->posX,
@@ -85,7 +96,7 @@ void SceneMgr::DrawObjects()
 					10,
 					0, 0, 1, 1,
 					1,
-					0
+					0.1
 				);
 			}
 			else if (m_gameObject[i]->type == OBJECT_CHARACTER && m_gameObject[i]->team == RED_TEAM) {
@@ -99,7 +110,7 @@ void SceneMgr::DrawObjects()
 					m_gameObject[i]->colorB,
 					m_gameObject[i]->colorA,
 					m_texRedTeamCharacter,
-					0
+					0.1
 				);
 				m_renderer->DrawSolidRectGauge(
 					m_gameObject[i]->posX,
@@ -109,11 +120,11 @@ void SceneMgr::DrawObjects()
 					5,
 					1, 0, 0, 1,
 					1,
-					0
+					0.1
 				);
 			}
 			else if (m_gameObject[i]->type == OBJECT_CHARACTER && m_gameObject[i]->team == BLUE_TEAM) {
-				m_renderer->DrawTexturedRect(
+				m_renderer->DrawTexturedRectSeq(
 					m_gameObject[i]->posX,
 					m_gameObject[i]->posY,
 					m_gameObject[i]->posZ,
@@ -123,7 +134,8 @@ void SceneMgr::DrawObjects()
 					m_gameObject[i]->colorB,
 					m_gameObject[i]->colorA,
 					m_texBlueTeamCharacter,
-					0
+					characterAnimationStack,0,8,1,
+					0.1
 				);
 				m_renderer->DrawSolidRectGauge(
 					m_gameObject[i]->posX,
@@ -133,7 +145,37 @@ void SceneMgr::DrawObjects()
 					5,
 					0, 0, 1, 1,
 					1,
-					0
+					0.1
+				);
+			}
+			else if (m_gameObject[i]->type == OBJECT_ARROW && m_gameObject[i]->team == BLUE_TEAM) {
+				m_renderer->DrawParticle(
+					m_gameObject[i]->posX,
+					m_gameObject[i]->posY,
+					m_gameObject[i]->posZ,
+					m_gameObject[i]->size,
+					m_gameObject[i]->colorR,
+					m_gameObject[i]->colorG,
+					m_gameObject[i]->colorB,
+					m_gameObject[i]->colorA,
+					-m_gameObject[i]->dirX, -m_gameObject[i]->dirY,
+					m_texBlueTeamArrow,
+					BlueTeamArrowParticleTime
+				);
+			}
+			else if (m_gameObject[i]->type == OBJECT_ARROW && m_gameObject[i]->team == RED_TEAM) {
+				m_renderer->DrawParticle(
+					m_gameObject[i]->posX,
+					m_gameObject[i]->posY,
+					m_gameObject[i]->posZ,
+					m_gameObject[i]->size,
+					m_gameObject[i]->colorR,
+					m_gameObject[i]->colorG,
+					m_gameObject[i]->colorB,
+					m_gameObject[i]->colorA,
+					-m_gameObject[i]->dirX, -m_gameObject[i]->dirY,
+					m_texBlueTeamArrow,
+					BlueTeamArrowParticleTime
 				);
 			}
 			else {
@@ -146,7 +188,7 @@ void SceneMgr::DrawObjects()
 					m_gameObject[i]->colorG,
 					m_gameObject[i]->colorB,
 					m_gameObject[i]->colorA,
-					0
+					0.1
 				);
 			}
 		}
@@ -213,6 +255,15 @@ GameObject** SceneMgr::GetObjectStats()
 
 void SceneMgr::Update(float elapsedTime)
 {
+	characterAnimationStack++;
+	if (characterAnimationStack >= 9) { characterAnimationStack = 0; }
+	characterAnimationStack = characterAnimationStack % 9;
+	BuildingAnimationStack++;
+	if (BuildingAnimationStack >= 9) { BuildingAnimationStack = 0; }
+	BuildingAnimationStack = BuildingAnimationStack % 9;
+	BlueTeamArrowParticleTime+=0.01;
+	if (BlueTeamArrowParticleTime >= 1) { BlueTeamArrowParticleTime = 0; }
+
 	CreateBullet(elapsedTime);
 	CreateEnemyCharacter(elapsedTime);
 	CreateOurCharacter(elapsedTime);

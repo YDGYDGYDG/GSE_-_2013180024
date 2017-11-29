@@ -43,10 +43,16 @@ private:
 	GameObject* m_gameObject[MAX_OBJECTS_COUNT];
 	Renderer *m_renderer;
 
+	GLuint m_texBG;
 	GLuint m_texCharacter;
+	int characterAnimationStack;
 	GLuint m_texRedTeamBuilding;
 	GLuint m_texBlueTeamBuilding;
+	int BuildingAnimationStack;
 	GLuint m_texBlueTeamCharacter;
+	GLuint m_texBlueTeamArrow;
+	float BlueTeamArrowParticleTime;
 	GLuint m_texRedTeamCharacter;
+	GLuint m_texRedTeamBullet;
 };
 

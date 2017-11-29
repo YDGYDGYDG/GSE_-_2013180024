@@ -46,7 +46,6 @@ void GameObject::Update(float elapsedTime) {
 	posX = posX + (speed * dirX) * elapsedTimeInSecond;
 	posY = posY + (speed * dirY) * elapsedTimeInSecond;
 
-
 	bb.leftBottom[0] = posX - (size / 2);
 	bb.leftBottom[1] = posY - (size / 2);
 	bb.rightTop[0] = posX + (size / 2);
