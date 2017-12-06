@@ -6,18 +6,23 @@
 SceneMgr::SceneMgr()
 {
 	m_renderer = new Renderer(WINDOW_WIDTH, WINDOW_HEIGHT);
-	m_texBG = m_renderer->CreatePngTexture("../Resource/ChulkungChulkung.png");
+	m_texBG = m_renderer->CreatePngTexture("../Resource/Images/ChulkungChulkung.png");
 
-	m_texBlueTeamBuilding = m_renderer->CreatePngTexture("../Resource/Bibblethump1.png");
-	m_texBlueTeamCharacter = m_renderer->CreatePngTexture("../Resource/SonicRun.png");
-	m_texBlueTeamArrow = m_renderer->CreatePngTexture("../Resource/Voidball.png");
+	m_texBlueTeamBuilding = m_renderer->CreatePngTexture("../Resource/Images/Bibblethump1.png");
+	m_texBlueTeamCharacter = m_renderer->CreatePngTexture("../Resource/Images/SonicRun.png");
+	m_texBlueTeamArrow = m_renderer->CreatePngTexture("../Resource/Images/Voidball.png");
 
-	m_texRedTeamBuilding = m_renderer->CreatePngTexture("../Resource/Bloodtrail.png");
-	m_texRedTeamCharacter = m_renderer->CreatePngTexture("../Resource/Butterfly.png");
+	m_texRedTeamBuilding = m_renderer->CreatePngTexture("../Resource/Images/Bloodtrail.png");
+	m_texRedTeamCharacter = m_renderer->CreatePngTexture("../Resource/Images/Butterfly.png");
 
 	for (int i = 0; i < MAX_OBJECTS_COUNT; i++) {
 		m_gameObject[i] = new GameObject();
 	}
+
+	m_sound = new Sound();
+	soundBG = m_sound->CreateSound("../Resource/SoundSamples/ophelia.mp3");
+	m_sound->PlaySound(soundBG, true, 1.0f);
+
 	buildingCounter = 0;
 	characterCounter = 0;
 	arrowCounter = 0;
@@ -37,6 +42,7 @@ SceneMgr::~SceneMgr()
 
 void SceneMgr::DrawObjects()
 {
+
 	//¹è°æ
 	m_renderer->DrawTexturedRect(0, 0, 0, WINDOW_HEIGHT, 1, 1, 1, 1, m_texBG, 0.9);
 
@@ -44,6 +50,8 @@ void SceneMgr::DrawObjects()
 	for (int i = 0; i < 50; i++) { 
 		m_renderer->DrawSolidRect((i * 10)-WINDOW_WIDTH/2, 0, 0, 1, 1, 1, 1, 1.0, 0.1);
 	}
+
+	m_renderer->DrawText(0, 0, GLUT_BITMAP_TIMES_ROMAN_24, 1, 1, 1, "?");
 
 	for (int i = 0; i < MAX_OBJECTS_COUNT; i++)
 	{
@@ -240,17 +248,11 @@ void SceneMgr::AddObject(int x, int y, int z, int type, int master, int team)
 
 void SceneMgr::DeleteObject() 
 {
-	delete [] m_gameObject;
-}
+	delete[] m_gameObject;
+	delete[] m_renderer;
+	delete[] m_sound;
+	m_sound->DeleteSound(soundBG);
 
-GameObject* SceneMgr::GetObjectStats(int index)
-{
-	return m_gameObject[index];
-}
-
-GameObject** SceneMgr::GetObjectStats()
-{
-	return m_gameObject;
 }
 
 void SceneMgr::Update(float elapsedTime)
