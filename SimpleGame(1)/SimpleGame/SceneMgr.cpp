@@ -6,32 +6,44 @@
 SceneMgr::SceneMgr()
 {
 	m_renderer = new Renderer(WINDOW_WIDTH, WINDOW_HEIGHT);
-	m_texBG = m_renderer->CreatePngTexture("../Resource/Images/ChulkungChulkung.png");
+	m_texBG = m_renderer->CreatePngTexture("../Resource/Images/IsaacStage.png");
 
-	m_texBlueTeamBuilding = m_renderer->CreatePngTexture("../Resource/Images/Bibblethump1.png");
+	m_texBlueTeamBuilding = m_renderer->CreatePngTexture("../Resource/Images/Bibblethump.png");
 	m_texBlueTeamCharacter = m_renderer->CreatePngTexture("../Resource/Images/SonicRun.png");
-	m_texBlueTeamArrow = m_renderer->CreatePngTexture("../Resource/Images/Voidball.png");
+	m_texArrow = m_renderer->CreatePngTexture("../Resource/Images/Voidball.png");
 
 	m_texRedTeamBuilding = m_renderer->CreatePngTexture("../Resource/Images/Bloodtrail.png");
 	m_texRedTeamCharacter = m_renderer->CreatePngTexture("../Resource/Images/Butterfly.png");
+
+	REDbuildingCounter = 0;
+	BLUEbuildingCounter = 0;
+	REDcharacterCounter = 0;
+	BLUEcharacterCounter = 0;
+	REDarrowCounter = 0;
+	BLUEarrowCounter= 0;
+	REDbulletCounter= 0;
+	BLUEbulletCounter = 0;
+	enemyResenCool = 0;
+	characterResenCool = 0;
+	characterAnimationStack = 0;
+
+	m_texClimateParticle = m_renderer->CreatePngTexture("../Resource/Images/Voidball.png");
+	climateTime = 0;
 
 	for (int i = 0; i < MAX_OBJECTS_COUNT; i++) {
 		m_gameObject[i] = new GameObject();
 	}
 
-	m_sound = new Sound();
-	soundBG = m_sound->CreateSound("../Resource/SoundSamples/ophelia.mp3");
-	m_sound->PlaySound(soundBG, true, 1.0f);
+	m_BGM = new Sound();
+	soundBG = m_BGM->CreateSound("../Resource/Sounds/Delirium.mp3");
+	m_BGM->PlaySound(soundBG, true, 1.0f);
+	m_Bang = new Sound();
+	soundBang = m_Bang->CreateSound("../Resource/Sounds/Bang.wav");
+	m_Hit = new Sound();
+	soundHit = m_Hit->CreateSound("../Resource/Sounds/Damage.wav");
+	m_CriHit = new Sound();
+	soundCriHit = m_CriHit->CreateSound("../Resource/Sounds/CriHit.wav");
 
-	buildingCounter = 0;
-	characterCounter = 0;
-	arrowCounter = 0;
-	bulletCounter = 0;
-	enemyResenCool = 0;
-	characterResenCool = 0;
-	characterAnimationStack = 0;
-	BuildingAnimationStack = 0;
-	BlueTeamArrowParticleTime = 0;
 }
 
 
@@ -51,7 +63,10 @@ void SceneMgr::DrawObjects()
 		m_renderer->DrawSolidRect((i * 10)-WINDOW_WIDTH/2, 0, 0, 1, 1, 1, 1, 1.0, 0.1);
 	}
 
-	m_renderer->DrawText(0, 0, GLUT_BITMAP_TIMES_ROMAN_24, 1, 1, 1, "?");
+	//m_renderer->DrawText(0, 0, GLUT_BITMAP_TIMES_ROMAN_24, 1, 1, 1, "?");
+
+	//날씨
+	m_renderer->DrawParticleClimate(0, 0, 0, 1, 0.5, 1, 0.5, 1, -0.1, -0.1, m_texClimateParticle, climateTime, 0.01);
 
 	for (int i = 0; i < MAX_OBJECTS_COUNT; i++)
 	{
@@ -78,12 +93,12 @@ void SceneMgr::DrawObjects()
 					m_gameObject[i]->size,
 					10,
 					1, 0, 0, 1,
-					1,
+					m_gameObject[i]->lifeCount / BUILDING_LIFE,
 					0.1
 				);
 			}
 			else if (m_gameObject[i]->type == OBJECT_BUILDING && m_gameObject[i]->team == BLUE_TEAM) {
-				m_renderer->DrawTexturedRectSeq(
+				m_renderer->DrawTexturedRect(
 					m_gameObject[i]->posX,
 					m_gameObject[i]->posY,
 					m_gameObject[i]->posZ,
@@ -93,7 +108,6 @@ void SceneMgr::DrawObjects()
 					m_gameObject[i]->colorB,
 					m_gameObject[i]->colorA,
 					m_texBlueTeamBuilding,
-					BuildingAnimationStack,0,8,1,
 					0.1
 				);
 				m_renderer->DrawSolidRectGauge(
@@ -103,7 +117,7 @@ void SceneMgr::DrawObjects()
 					m_gameObject[i]->size,
 					10,
 					0, 0, 1, 1,
-					1,
+					m_gameObject[i]->lifeCount / BUILDING_LIFE,
 					0.1
 				);
 			}
@@ -127,7 +141,7 @@ void SceneMgr::DrawObjects()
 					m_gameObject[i]->size,
 					5,
 					1, 0, 0, 1,
-					1,
+					m_gameObject[i]->lifeCount/CHARACTER_LIFE,
 					0.1
 				);
 			}
@@ -152,7 +166,7 @@ void SceneMgr::DrawObjects()
 					m_gameObject[i]->size,
 					5,
 					0, 0, 1, 1,
-					1,
+					m_gameObject[i]->lifeCount / CHARACTER_LIFE,
 					0.1
 				);
 			}
@@ -167,8 +181,9 @@ void SceneMgr::DrawObjects()
 					m_gameObject[i]->colorB,
 					m_gameObject[i]->colorA,
 					-m_gameObject[i]->dirX, -m_gameObject[i]->dirY,
-					m_texBlueTeamArrow,
-					BlueTeamArrowParticleTime
+					m_texArrow,
+					m_gameObject[i]->arrowParticleTime,
+					0.1
 				);
 			}
 			else if (m_gameObject[i]->type == OBJECT_ARROW && m_gameObject[i]->team == RED_TEAM) {
@@ -182,8 +197,9 @@ void SceneMgr::DrawObjects()
 					m_gameObject[i]->colorB,
 					m_gameObject[i]->colorA,
 					-m_gameObject[i]->dirX, -m_gameObject[i]->dirY,
-					m_texBlueTeamArrow,
-					BlueTeamArrowParticleTime
+					m_texArrow,
+					m_gameObject[i]->arrowParticleTime,
+					0.1
 				);
 			}
 			else {
@@ -215,26 +231,42 @@ void SceneMgr::AddObject(int x, int y, int z, int type, int master, int team)
 			switch (m_gameObject[i]->type) //갯수 조절
 			{
 			case OBJECT_BUILDING:
-				if (buildingCounter < MAX_BUILDINGS_COUNT) {
-					buildingCounter++;
+				if (m_gameObject[i]->team == RED_TEAM && REDbuildingCounter < MAX_RED_BUILDINGS_COUNT) {
+					REDbuildingCounter++;
+					m_gameObject[i]->objectDrawFlag = true;
+				}
+				if (m_gameObject[i]->team == BLUE_TEAM && BLUEbuildingCounter < MAX_BLUE_BUILDINGS_COUNT) {
+					BLUEbuildingCounter++;
 					m_gameObject[i]->objectDrawFlag = true;
 				}
 				break;
 			case OBJECT_CHARACTER:
-				if (characterCounter < MAX_CHARACTERS_COUNT) {
-					characterCounter++;
+				if (m_gameObject[i]->team == RED_TEAM && REDcharacterCounter < MAX_RED_CHARACTERS_COUNT) {
+					REDcharacterCounter++;
+					m_gameObject[i]->objectDrawFlag = true;
+				}
+				if (m_gameObject[i]->team == BLUE_TEAM && BLUEcharacterCounter < MAX_BLUE_CHARACTERS_COUNT) {
+					BLUEcharacterCounter++;
 					m_gameObject[i]->objectDrawFlag = true;
 				}
 				break;
 			case OBJECT_ARROW:
-				if (arrowCounter < MAX_ARROWS_COUNT) {
-					arrowCounter++;
+				if (m_gameObject[i]->team == RED_TEAM && REDarrowCounter < MAX_RED_ARROWS_COUNT) {
+					REDarrowCounter++;
+					m_gameObject[i]->objectDrawFlag = true;
+				}
+				if (m_gameObject[i]->team == BLUE_TEAM && BLUEarrowCounter < MAX_BLUE_ARROWS_COUNT) {
+					BLUEarrowCounter++;
 					m_gameObject[i]->objectDrawFlag = true;
 				}
 				break;
 			case OBJECT_BULLET:
-				if (bulletCounter < MAX_BULLETS_COUNT) {
-					bulletCounter++;
+				if (m_gameObject[i]->team == RED_TEAM && REDbulletCounter < MAX_RED_BULLETS_COUNT) {
+					REDbulletCounter++;
+					m_gameObject[i]->objectDrawFlag = true;
+				}
+				if (m_gameObject[i]->team == BLUE_TEAM && BLUEbulletCounter < MAX_BLUE_BULLETS_COUNT) {
+					BLUEbulletCounter++;
 					m_gameObject[i]->objectDrawFlag = true;
 				}
 				break;
@@ -250,25 +282,38 @@ void SceneMgr::DeleteObject()
 {
 	delete[] m_gameObject;
 	delete[] m_renderer;
-	delete[] m_sound;
-	m_sound->DeleteSound(soundBG);
+	delete[] m_BGM;
+	m_BGM->DeleteSound(soundBG);
+	delete[] m_Bang;
+	m_Bang->DeleteSound(soundBang);
+	delete[] m_Hit;
+	m_Hit->DeleteSound(soundHit);
+	delete[] m_CriHit;
+	m_CriHit->DeleteSound(soundCriHit);
 
 }
 
 void SceneMgr::Update(float elapsedTime)
 {
+	std::cout << BLUEbuildingCounter << std::endl;
+	climateTime += 0.01;
+	if (climateTime > 1000) { climateTime = 0; }
+
 	characterAnimationStack++;
 	if (characterAnimationStack >= 9) { characterAnimationStack = 0; }
 	characterAnimationStack = characterAnimationStack % 9;
-	BuildingAnimationStack++;
-	if (BuildingAnimationStack >= 9) { BuildingAnimationStack = 0; }
-	BuildingAnimationStack = BuildingAnimationStack % 9;
-	BlueTeamArrowParticleTime+=0.01;
-	if (BlueTeamArrowParticleTime >= 1) { BlueTeamArrowParticleTime = 0; }
+
+	for (int i = 0; i < MAX_RED_ARROWS_COUNT + MAX_BLUE_ARROWS_COUNT; i++) {
+		if (m_gameObject[i]->type == OBJECT_ARROW) {
+			m_gameObject[i]->arrowParticleTime += 0.001;
+			if (m_gameObject[i]->arrowParticleTime >= 1000) { m_gameObject[i]->arrowParticleTime = 0; }
+		}
+	}
 
 	CreateBullet(elapsedTime);
 	CreateEnemyCharacter(elapsedTime);
 	CreateOurCharacter(elapsedTime);
+
 	for (int i = 0; i < MAX_OBJECTS_COUNT; i++) { // 그리기셋팅 초기화
 		m_gameObject[i]->Update(elapsedTime);
 		if (m_gameObject[i]->objectDrawFlag == false) {
@@ -276,6 +321,7 @@ void SceneMgr::Update(float elapsedTime)
 		}
 		m_gameObject[i]->collisionCheck = false; //충돌 초기화
 	}
+
 	for (int i = 0; i < MAX_OBJECTS_COUNT; i++) { // 화면 나간 총알은 체력 0
 		if (m_gameObject[i]->type == OBJECT_ARROW || m_gameObject[i]->type == OBJECT_BULLET) {
 			if (m_gameObject[i]->posX > WINDOW_WIDTH / 2 || m_gameObject[i]->posX < -WINDOW_WIDTH / 2 ||
@@ -296,7 +342,7 @@ void SceneMgr::Update(float elapsedTime)
 
 	DeleteDeadObject(); //나간애, 체력 다된 애 삭제
 
-	//충돌 체크 // 현재 충돌이 해체되었을 때 collisionCheck가 도로 false가 되어야 함
+	//충돌 체크 // 
 	for (int i = 0; i < MAX_OBJECTS_COUNT; i++) {
 		for (int j = 0; j < MAX_OBJECTS_COUNT; j++) {
 			if(m_gameObject[i]->team != m_gameObject[j]->team){ //서로 다른 팀인 경우에만 충돌
@@ -306,13 +352,11 @@ void SceneMgr::Update(float elapsedTime)
 						m_gameObject[i]->collisionCheck = true; //충돌중이에요~
 						m_gameObject[j]->collisionCheck = true; //얘랑요
 						if (m_gameObject[i]->damageCheck == false || m_gameObject[j]->damageCheck == false) { // 마주친 둘 중 하나라도 충돌 중이 아니었다면
+							m_CriHit->PlaySound(soundCriHit, false, 1.0f);
 							m_gameObject[i]->lifeCount -= m_gameObject[j]->attackPower; // 서로의 공격력만큼 각각 생명력 감소
 							m_gameObject[j]->lifeCount -= m_gameObject[i]->attackPower;
 							m_gameObject[i]->damageCheck = true;
 							m_gameObject[j]->damageCheck = true;
-							std::cout << m_gameObject[i]->lifeCount << std::endl;
-							std::cout << m_gameObject[j]->lifeCount << std::endl;
-							std::cout << "띠기" << std::endl;
 						}
 					}
 				}
@@ -321,6 +365,7 @@ void SceneMgr::Update(float elapsedTime)
 					if (Collision(*m_gameObject[i], *m_gameObject[j]) == true) {
 						m_gameObject[i]->collisionCheck = true; //충돌중이에요~
 						m_gameObject[j]->collisionCheck = true; //얘랑요
+						m_Hit->PlaySound(soundHit, false, 1.0f);
 						if (m_gameObject[i]->damageCheck == false || m_gameObject[j]->damageCheck == false) { // 마주친 둘 중 하나라도 충돌 중이 아니었다면
 							m_gameObject[i]->lifeCount -= m_gameObject[j]->attackPower; // 서로의 공격력만큼 각각 생명력 감소
 							m_gameObject[j]->lifeCount -= m_gameObject[i]->attackPower;
@@ -335,6 +380,7 @@ void SceneMgr::Update(float elapsedTime)
 						m_gameObject[i]->collisionCheck = true; //충돌중이에요~
 						m_gameObject[j]->collisionCheck = true; //얘랑요
 						if (m_gameObject[i]->damageCheck == false || m_gameObject[j]->damageCheck == false) { // 마주친 둘 중 하나라도 충돌 중이 아니었다면
+							m_Hit->PlaySound(soundHit, false, 1.0f);
 							m_gameObject[i]->lifeCount -= m_gameObject[j]->attackPower; // 서로의 공격력만큼 각각 생명력 감소
 							m_gameObject[j]->lifeCount -= m_gameObject[i]->attackPower;
 							m_gameObject[i]->damageCheck = true;
@@ -348,6 +394,7 @@ void SceneMgr::Update(float elapsedTime)
 						m_gameObject[i]->collisionCheck = true; //충돌중이에요~
 						m_gameObject[j]->collisionCheck = true; //얘랑요
 						if (m_gameObject[i]->damageCheck == false || m_gameObject[j]->damageCheck == false) { // 마주친 둘 중 하나라도 충돌 중이 아니었다면
+							m_Hit->PlaySound(soundHit, false, 1.0f);
 							m_gameObject[i]->lifeCount -= m_gameObject[j]->attackPower; // 서로의 공격력만큼 각각 생명력 감소
 							m_gameObject[j]->lifeCount -= m_gameObject[i]->attackPower;
 							m_gameObject[i]->damageCheck = true;
@@ -361,6 +408,7 @@ void SceneMgr::Update(float elapsedTime)
 						m_gameObject[i]->collisionCheck = true; //충돌중이에요~
 						m_gameObject[j]->collisionCheck = true; //얘랑요
 						if (m_gameObject[i]->damageCheck == false || m_gameObject[j]->damageCheck == false) { // 마주친 둘 중 하나라도 충돌 중이 아니었다면
+							m_Hit->PlaySound(soundHit, false, 1.0f);
 							m_gameObject[i]->lifeCount -= m_gameObject[j]->attackPower; // 서로의 공격력만큼 각각 생명력 감소
 							m_gameObject[j]->lifeCount -= m_gameObject[i]->attackPower;
 							m_gameObject[i]->damageCheck = true;
@@ -446,16 +494,38 @@ void SceneMgr::DeleteDeadObject() {
 			switch (m_gameObject[i]->type)
 			{
 			case OBJECT_BUILDING:
-				buildingCounter--;
+				if (m_gameObject[i]->team == RED_TEAM) {
+					m_Bang->PlaySound(soundBang, false, 1.0f);
+					REDbuildingCounter--;
+				}
+				else if (m_gameObject[i]->team == BLUE_TEAM) {
+					m_Bang->PlaySound(soundBang, false, 1.0f);
+					BLUEbuildingCounter--;
+				}
 				break;
 			case OBJECT_CHARACTER:
-				characterCounter--;
+				if (m_gameObject[i]->team == RED_TEAM) {
+					REDcharacterCounter--;
+				}
+				else if (m_gameObject[i]->team == BLUE_TEAM) {
+					BLUEcharacterCounter--;
+				}
 				break;
 			case OBJECT_ARROW:
-				arrowCounter--;
+				if (m_gameObject[i]->team == RED_TEAM) {
+					REDarrowCounter--;
+				}
+				else if (m_gameObject[i]->team == BLUE_TEAM) {
+					BLUEarrowCounter--;
+				}
 				break;
 			case OBJECT_BULLET:
-				bulletCounter--;
+				if (m_gameObject[i]->team == RED_TEAM) {
+					REDbulletCounter--;
+				}
+				else if (m_gameObject[i]->team == BLUE_TEAM) {
+					BLUEbulletCounter--;
+				}
 				break;
 			default:
 				break;

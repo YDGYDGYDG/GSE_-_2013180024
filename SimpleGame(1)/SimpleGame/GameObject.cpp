@@ -25,6 +25,8 @@ GameObject::GameObject()
 	attackPower = 0;
 	fireBulletCool = 0;
 	master = -1;
+	arrowParticleTime = 0;
+
 }
 
 
@@ -92,8 +94,6 @@ void GameObject::SettingType(int objectType) {
 		collisionCheck = false;
 		damageCheck = false;
 		speed = 0;
-		dirX = 0;
-		dirY = 0;
 		size = 100;
 		colorR = 1;
 		colorG = 1;
@@ -105,7 +105,7 @@ void GameObject::SettingType(int objectType) {
 		bb.rightTop[1] = posY + (size / 2);
 		Life = true;
 		lifeTime = 100;
-		lifeCount = 500;
+		lifeCount = BUILDING_LIFE;
 		attackPower = 500;
 		break;
 	case 2: //캐릭터
@@ -113,9 +113,11 @@ void GameObject::SettingType(int objectType) {
 		damageCheck = false;
 		speed = 300;
 		dirX = rand() % 3 - 1;
-		dirY = rand() % 3 - 1;
-		if (dirX == 0 && dirY == 0) {
-			dirX++; dirY++;
+		if (team == RED_TEAM) {
+			dirY = -1;
+		}
+		if(team==BLUE_TEAM){
+			dirY = 1;
 		}
 		size = 30;
 		colorR = 1;
@@ -128,17 +130,19 @@ void GameObject::SettingType(int objectType) {
 		bb.rightTop[1] = posY + (size / 2);
 		Life = true;
 		lifeTime = 100;
-		lifeCount = 10;
-		attackPower = 10;
+		lifeCount = CHARACTER_LIFE;
+		attackPower = 30;
 		break;
 	case 3: //캐릭터의 총알
 		collisionCheck = false;
 		damageCheck = false;
 		speed = 600;
 		dirX = rand() % 3 - 1;
-		dirY = rand() % 3 - 1;
-		if (dirX == 0 && dirY == 0) {
-			dirX++; dirY++;
+		if (team == RED_TEAM) {
+			dirY = -1;
+		}
+		if (team == BLUE_TEAM) {
+			dirY = 1;
 		}
 		size = 4;
 		if (team == RED_TEAM) {
@@ -158,7 +162,7 @@ void GameObject::SettingType(int objectType) {
 		bb.rightTop[1] = posY + (size / 2);
 		Life = true;
 		lifeTime = 100;
-		lifeCount = 10;
+		lifeCount = BULLET_LIFE;
 		attackPower = 10;
 		break;
 	case 4: //건물의 총알
@@ -166,9 +170,11 @@ void GameObject::SettingType(int objectType) {
 		damageCheck = false;
 		speed = 100;
 		dirX = rand() % 3 - 1;
-		dirY = rand() % 3 - 1;
-		if (dirX == 0 && dirY == 0) {
-			dirX++; dirY++;
+		if (team == RED_TEAM) {
+			dirY = -1;
+		}
+		if (team == BLUE_TEAM) {
+			dirY = 1;
 		}
 		size = 4;
 		if (team == RED_TEAM) {
@@ -188,8 +194,9 @@ void GameObject::SettingType(int objectType) {
 		bb.rightTop[1] = posY + (size / 2);
 		Life = true;
 		lifeTime = 100;
-		lifeCount = 10;
+		lifeCount = ARROW_LIFE;
 		attackPower = 10;
+		arrowParticleTime = 0;
 		break;
 	}
 }

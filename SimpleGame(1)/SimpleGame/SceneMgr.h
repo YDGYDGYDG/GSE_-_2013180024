@@ -5,11 +5,15 @@
 #include "Sound.h"
 
 //오브젝트 갯수
-#define MAX_BUILDINGS_COUNT 6
-#define MAX_CHARACTERS_COUNT 10
-#define MAX_BULLETS_COUNT 200
-#define MAX_ARROWS_COUNT 201  // -1
-#define MAX_OBJECTS_COUNT (MAX_BUILDINGS_COUNT + MAX_CHARACTERS_COUNT + MAX_BULLETS_COUNT + MAX_ARROWS_COUNT)
+#define MAX_RED_BUILDINGS_COUNT 3
+#define MAX_BLUE_BUILDINGS_COUNT 3
+#define MAX_RED_CHARACTERS_COUNT 10
+#define MAX_BLUE_CHARACTERS_COUNT 10
+#define MAX_RED_BULLETS_COUNT 100
+#define MAX_BLUE_BULLETS_COUNT 100
+#define MAX_RED_ARROWS_COUNT 101  // -1
+#define MAX_BLUE_ARROWS_COUNT 101  // -1
+#define MAX_OBJECTS_COUNT (MAX_RED_BUILDINGS_COUNT + MAX_RED_CHARACTERS_COUNT + MAX_RED_BULLETS_COUNT + MAX_RED_ARROWS_COUNT + MAX_BLUE_BUILDINGS_COUNT + MAX_BLUE_CHARACTERS_COUNT+MAX_BLUE_BULLETS_COUNT+MAX_BLUE_ARROWS_COUNT)
 //오브젝트 타입
 #define OBJECT_BUILDING 1
 #define OBJECT_CHARACTER 2
@@ -23,10 +27,6 @@ public:
 	SceneMgr();
 	~SceneMgr();
 
-	int buildingCounter;
-	int characterCounter;
-	int arrowCounter;
-	int bulletCounter;
 	float enemyResenCool;
 	float characterResenCool;
 
@@ -40,22 +40,38 @@ public:
 	void CreateOurCharacter(float elapsedTime);
 
 private:
+	int REDbuildingCounter;
+	int BLUEbuildingCounter;
+	int REDcharacterCounter;
+	int BLUEcharacterCounter;
+	int REDarrowCounter;
+	int BLUEarrowCounter;
+	int REDbulletCounter;
+	int BLUEbulletCounter;
+
 	bool Collision(GameObject a, GameObject b); //충돌
 	GameObject* m_gameObject[MAX_OBJECTS_COUNT];
 	Renderer *m_renderer;
-	Sound *m_sound;
-	int soundBG;
 
+	Sound *m_BGM;//배경음악
+	int soundBG;
+	Sound *m_Bang;//건물 터지는 소리
+	int soundBang;
+	Sound *m_Hit;//총알 맞는 소리
+	int soundHit;
+	Sound *m_CriHit;//캐릭터가 건물에 자폭하는 소리
+	int soundCriHit;
+	
+	//텍스처
 	GLuint m_texBG;
 	GLuint m_texCharacter;
 	int characterAnimationStack;
-	GLuint m_texRedTeamBuilding;
 	GLuint m_texBlueTeamBuilding;
-	int BuildingAnimationStack;
 	GLuint m_texBlueTeamCharacter;
-	GLuint m_texBlueTeamArrow;
-	float BlueTeamArrowParticleTime;
+	GLuint m_texArrow;
+	GLuint m_texRedTeamBuilding;
 	GLuint m_texRedTeamCharacter;
-	GLuint m_texRedTeamBullet;
+	GLuint m_texClimateParticle; //날씨
+	double climateTime;
 };
 

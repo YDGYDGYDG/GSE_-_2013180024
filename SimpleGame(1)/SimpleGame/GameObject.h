@@ -2,6 +2,10 @@
 
 #define RED_TEAM 0
 #define BLUE_TEAM 1
+#define BUILDING_LIFE 500
+#define CHARACTER_LIFE 50
+#define BULLET_LIFE 1
+#define ARROW_LIFE 1
 
 class GameObject
 {
@@ -51,7 +55,8 @@ public:
 	bool damageCheck;
 	//충돌주인
 	int master;
-
+	//파티클
+	double arrowParticleTime;
 private:
 
 };
