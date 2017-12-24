@@ -3,13 +3,13 @@
 #include <mmsystem.h>
 #pragma comment(lib, "winmm.lib")
 
-//#define SOUND_BGM "..\\Resource\\Sounds\\Delirium.wav"
+#define SOUND_BGM "..\\Resource\\Sounds\\Delirium.wav"
 #define SOUND_BOSS_BGM "..\\Resource\\Sounds\\BOSS.wav"
 
 
 SceneMgr::SceneMgr()
 {
-	PlaySound(TEXT(SOUND_BOSS_BGM), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+	PlaySound(TEXT(SOUND_BGM), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	m_renderer = new Renderer(WINDOW_WIDTH, WINDOW_HEIGHT);
 	m_texBG = m_renderer->CreatePngTexture("../Resource/Images/land.png");
 	m_texBGgrass = m_renderer->CreatePngTexture("../Resource/Images/grass.png");
@@ -700,9 +700,14 @@ void SceneMgr::DeleteDeadObject() {
 			m_gameObject[i]->objectDrawFlag = false;
 			for (int j = 0; j < MAX_OBJECTS_COUNT; j++) {
 				if (m_gameObject[j]->master == i) {
-					m_gameObject[j]->master = -1; //주인이 죽으면 총알은 주인없는 총알이 된다 - 죽음의 메아리
-					//m_gameObject[j]->objectDrawFlag = false; //이거로 하면 주인이 죽을 때 총알도 같이 죽음
-					//bulletCounter--;
+					//m_gameObject[j]->master = -1; //주인이 죽으면 총알은 주인없는 총알이 된다 - 죽음의 메아리
+					m_gameObject[j]->objectDrawFlag = false; //주인이 죽을 때 총알도 같이 죽는다
+					if (m_gameObject[j]->team == RED_TEAM) {
+						REDbulletCounter--;
+					}
+					else if (m_gameObject[j]->team == BLUE_TEAM) {
+						BLUEbulletCounter--;
+					}
 				}
 			}
 			switch (m_gameObject[i]->type)
@@ -715,6 +720,9 @@ void SceneMgr::DeleteDeadObject() {
 				else if (m_gameObject[i]->team == BLUE_TEAM) {
 					m_Bang->PlaySound(soundBang, false, 1.0f);
 					BLUEbuildingCounter--;
+					if (BLUEbuildingCounter < 2) {
+						PlaySound(TEXT(SOUND_BOSS_BGM), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+					}
 				}
 				break;
 			case OBJECT_CHARACTER:
