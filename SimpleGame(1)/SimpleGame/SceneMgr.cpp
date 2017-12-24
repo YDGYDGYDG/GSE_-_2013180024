@@ -664,7 +664,7 @@ void SceneMgr::CreateBullet(float elapsedTime) {
 	//캐릭터 총알 생성
 	for (int i = 0; i < MAX_OBJECTS_COUNT; i++) {
 		if (m_gameObject[i]->type == OBJECT_CHARACTER && m_gameObject[i]->state==ATTACK_STATE) {
-			if (m_gameObject[i]->fireBulletCool > 1.3f) {
+			if (m_gameObject[i]->fireBulletCool > 1.5f) {
 				AddObject(m_gameObject[i]->posX, m_gameObject[i]->posY, m_gameObject[i]->posZ, OBJECT_BULLET, i, m_gameObject[i]->team);
 				m_gameObject[i]->fireBulletCool = 0;
 			}
