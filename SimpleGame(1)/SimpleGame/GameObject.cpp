@@ -21,7 +21,6 @@ GameObject::GameObject()
 	bb.rightTop[0] = 0;
 	bb.rightTop[1] = 0;
 	Life = false;
-	lifeTime = 0;
 	lifeCount = 0;
 	attackPower = 0;
 	fireBulletCool = 0;
@@ -93,7 +92,6 @@ void GameObject::SettingType(int objectType, int whatButton) {
 		bb.rightTop[0] =   0;
 		bb.rightTop[1] =   0;
 		Life = false;
-		lifeTime = 0;
 		lifeCount = 0;
 		attackPower = 0;
 		fireBulletCool = 0;
@@ -116,9 +114,8 @@ void GameObject::SettingType(int objectType, int whatButton) {
 		bb.rightTop[0] = posX + (size / 2);
 		bb.rightTop[1] = posY + (size / 2);
 		Life = true;
-		lifeTime = 100;
 		lifeCount = BUILDING_LIFE;
-		attackPower = 0;
+		attackPower = 1;
 		attackRange = 0;
 		break;
 	case 2: //캐릭터
@@ -141,21 +138,21 @@ void GameObject::SettingType(int objectType, int whatButton) {
 		bb.rightTop[0] = posX + (size / 2);
 		bb.rightTop[1] = posY + (size / 2);
 		Life = true;
-		lifeTime = 100;
-		lifeCount = CHARACTER_LIFE;
 		if (team == RED_TEAM) {
 			charClass = rand() % 2;
 		}
 		attackPower = 10;
 		if (charClass == CHARACTER_ARCHER) {
+			lifeCount = CHARACTER_ARCHER_LIFE;
 			size = 50;
-			attackRange = 200;
+			attackRange = 150;
 			speed = 20; 
 		}
 		else if (charClass == CHARACTER_KNIGHT) {
+			lifeCount = CHARACTER_KNIGHT_LIFE;
 			size = 50;
 			attackRange = 40;
-			speed = 50; 
+			speed = 40; 
 		}
 		break;
 	case 3: //캐릭터의 총알
@@ -186,7 +183,6 @@ void GameObject::SettingType(int objectType, int whatButton) {
 		bb.rightTop[0] = posX + (size / 2);
 		bb.rightTop[1] = posY + (size / 2);
 		Life = true;
-		lifeTime = 100;
 		lifeCount = BULLET_LIFE;
 		attackPower = 10;
 
@@ -195,7 +191,7 @@ void GameObject::SettingType(int objectType, int whatButton) {
 		collisionCheck = false;
 		damageCheck = false;
 		speed = 100;
-		dirX = rand() % 3 - 1;
+		dirX = 0;
 		if (team == RED_TEAM) {
 			dirY = -1;
 		}
@@ -219,7 +215,6 @@ void GameObject::SettingType(int objectType, int whatButton) {
 		bb.rightTop[0] = posX + (size / 2);
 		bb.rightTop[1] = posY + (size / 2);
 		Life = true;
-		lifeTime = 100;
 		lifeCount = ARROW_LIFE;
 		attackPower = 10;
 		arrowParticleTime = 0;

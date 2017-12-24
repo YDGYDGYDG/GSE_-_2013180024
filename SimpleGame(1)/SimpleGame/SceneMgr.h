@@ -29,6 +29,7 @@ public:
 
 	float enemyResenCool;
 	float characterResenCool;
+	int BLUEcharacterCounter;
 
 	//버튼
 	Button *m_knightBT;
@@ -49,7 +50,6 @@ private:
 	int REDbuildingCounter;
 	int BLUEbuildingCounter;
 	int REDcharacterCounter;
-	int BLUEcharacterCounter;
 	int REDarrowCounter;
 	int BLUEarrowCounter;
 	int REDbulletCounter;
@@ -60,14 +60,12 @@ private:
 	Renderer *m_renderer;
 
 
-	Sound *m_BGM;//배경음악
-	int soundBG;
 	Sound *m_Bang;//건물 터지는 소리
 	int soundBang;
-	Sound *m_Hit;//총알 맞는 소리
+	Sound *m_Hit;//총알 부딪히는 소리
 	int soundHit;
-	Sound *m_CriHit;//캐릭터가 건물에 자폭하는 소리
-	int soundCriHit;
+	Sound *m_BuildingHit;//건물이 맞는 소리
+	int soundBuildingHit;
 	
 
 	//텍스처

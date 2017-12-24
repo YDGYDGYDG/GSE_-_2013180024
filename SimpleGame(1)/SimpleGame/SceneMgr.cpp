@@ -1,10 +1,15 @@
 #include "stdafx.h"
 #include "SceneMgr.h"
+#include <mmsystem.h>
+#pragma comment(lib, "winmm.lib")
 
+//#define SOUND_BGM "..\\Resource\\Sounds\\Delirium.wav"
+#define SOUND_BOSS_BGM "..\\Resource\\Sounds\\BOSS.wav"
 
 
 SceneMgr::SceneMgr()
 {
+	PlaySound(TEXT(SOUND_BOSS_BGM), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	m_renderer = new Renderer(WINDOW_WIDTH, WINDOW_HEIGHT);
 	m_texBG = m_renderer->CreatePngTexture("../Resource/Images/land.png");
 	m_texBGgrass = m_renderer->CreatePngTexture("../Resource/Images/grass.png");
@@ -55,15 +60,12 @@ SceneMgr::SceneMgr()
 	m_archerBT->pushed = false;
 	whatButton = KNIGHT_PUSHED;
 
-	m_BGM = new Sound();
-	soundBG = m_BGM->CreateSound("../Resource/Sounds/Delirium.mp3");
-	m_BGM->PlaySound(soundBG, true, 1.0f);
 	m_Bang = new Sound();
 	soundBang = m_Bang->CreateSound("../Resource/Sounds/Bang.wav");
 	m_Hit = new Sound();
 	soundHit = m_Hit->CreateSound("../Resource/Sounds/Damage.wav");
-	m_CriHit = new Sound();
-	soundCriHit = m_CriHit->CreateSound("../Resource/Sounds/CriHit.wav");
+	m_BuildingHit = new Sound();
+	soundBuildingHit = m_BuildingHit->CreateSound("../Resource/Sounds/Boxhit.wav");
 
 }
 
@@ -170,6 +172,16 @@ void SceneMgr::DrawObjects()
 						(int)characterAnimationStack, 0, 8, 1,
 						0.4
 					);
+					m_renderer->DrawSolidRectGauge(
+						m_gameObject[i]->posX,
+						m_gameObject[i]->posY + m_gameObject[i]->size / 2 + 5,
+						m_gameObject[i]->posZ,
+						m_gameObject[i]->size,
+						5,
+						1, 0, 0, 1,
+						m_gameObject[i]->lifeCount / CHARACTER_KNIGHT_LIFE,
+						0.4
+					);
 				}
 				else if (m_gameObject[i]->charClass == CHARACTER_KNIGHT && m_gameObject[i]->state == ATTACK_STATE) {
 					m_renderer->DrawTexturedRectSeq(
@@ -183,6 +195,16 @@ void SceneMgr::DrawObjects()
 						m_gameObject[i]->colorA,
 						m_texRedTeamKnightAttack,
 						(int)characterAnimationStack, 0, 13, 1,
+						0.4
+					);
+					m_renderer->DrawSolidRectGauge(
+						m_gameObject[i]->posX,
+						m_gameObject[i]->posY + m_gameObject[i]->size / 2 + 5,
+						m_gameObject[i]->posZ,
+						m_gameObject[i]->size,
+						5,
+						1, 0, 0, 1,
+						m_gameObject[i]->lifeCount / CHARACTER_KNIGHT_LIFE,
 						0.4
 					);
 				}
@@ -200,6 +222,16 @@ void SceneMgr::DrawObjects()
 						(int)characterAnimationStack, 0, 8, 1,
 						0.4
 					);
+					m_renderer->DrawSolidRectGauge(
+						m_gameObject[i]->posX,
+						m_gameObject[i]->posY + m_gameObject[i]->size / 2 + 5,
+						m_gameObject[i]->posZ,
+						m_gameObject[i]->size,
+						5,
+						1, 0, 0, 1,
+						m_gameObject[i]->lifeCount / CHARACTER_ARCHER_LIFE,
+						0.4
+					);
 				}
 				else if (m_gameObject[i]->charClass == CHARACTER_ARCHER && m_gameObject[i]->state == ATTACK_STATE) {
 					m_renderer->DrawTexturedRectSeq(
@@ -215,17 +247,17 @@ void SceneMgr::DrawObjects()
 						(int)characterAnimationStack, 0, 13, 1,
 						0.4
 					);
+					m_renderer->DrawSolidRectGauge(
+						m_gameObject[i]->posX,
+						m_gameObject[i]->posY + m_gameObject[i]->size / 2 + 5,
+						m_gameObject[i]->posZ,
+						m_gameObject[i]->size,
+						5,
+						1, 0, 0, 1,
+						m_gameObject[i]->lifeCount / CHARACTER_ARCHER_LIFE,
+						0.4
+					);
 				}
-				m_renderer->DrawSolidRectGauge(
-					m_gameObject[i]->posX,
-					m_gameObject[i]->posY + m_gameObject[i]->size / 2 + 5,
-					m_gameObject[i]->posZ,
-					m_gameObject[i]->size,
-					5,
-					1, 0, 0, 1,
-					m_gameObject[i]->lifeCount/CHARACTER_LIFE,
-					0.4
-				);
 			}
 			else if (m_gameObject[i]->type == OBJECT_CHARACTER && m_gameObject[i]->team == BLUE_TEAM) {
 				if (m_gameObject[i]->charClass == CHARACTER_KNIGHT && m_gameObject[i]->state == RUN_STATE) {
@@ -240,6 +272,16 @@ void SceneMgr::DrawObjects()
 						m_gameObject[i]->colorA,
 						m_texBlueTeamKnightRun,
 						(int)characterAnimationStack, 0, 8, 1,
+						0.4
+					);
+					m_renderer->DrawSolidRectGauge(
+						m_gameObject[i]->posX,
+						m_gameObject[i]->posY + m_gameObject[i]->size / 2 + 5,
+						m_gameObject[i]->posZ,
+						m_gameObject[i]->size,
+						5,
+						0, 0, 1, 1,
+						m_gameObject[i]->lifeCount / CHARACTER_KNIGHT_LIFE,
 						0.4
 					);
 				}
@@ -257,6 +299,16 @@ void SceneMgr::DrawObjects()
 						(int)characterAnimationStack, 0, 13, 1,
 						0.4
 					);
+					m_renderer->DrawSolidRectGauge(
+						m_gameObject[i]->posX,
+						m_gameObject[i]->posY + m_gameObject[i]->size / 2 + 5,
+						m_gameObject[i]->posZ,
+						m_gameObject[i]->size,
+						5,
+						0, 0, 1, 1,
+						m_gameObject[i]->lifeCount / CHARACTER_KNIGHT_LIFE,
+						0.4
+					);
 				}
 				else if (m_gameObject[i]->charClass == CHARACTER_ARCHER && m_gameObject[i]->state == RUN_STATE) {
 					m_renderer->DrawTexturedRectSeq(
@@ -270,6 +322,16 @@ void SceneMgr::DrawObjects()
 						m_gameObject[i]->colorA,
 						m_texBlueTeamArcherRun,
 						(int)characterAnimationStack, 0, 8, 1,
+						0.4
+					);
+					m_renderer->DrawSolidRectGauge(
+						m_gameObject[i]->posX,
+						m_gameObject[i]->posY + m_gameObject[i]->size / 2 + 5,
+						m_gameObject[i]->posZ,
+						m_gameObject[i]->size,
+						5,
+						0, 0, 1, 1,
+						m_gameObject[i]->lifeCount / CHARACTER_ARCHER_LIFE,
 						0.4
 					);
 				}
@@ -287,17 +349,17 @@ void SceneMgr::DrawObjects()
 						(int)characterAnimationStack, 0, 13, 1,
 						0.4
 					);
+					m_renderer->DrawSolidRectGauge(
+						m_gameObject[i]->posX,
+						m_gameObject[i]->posY + m_gameObject[i]->size / 2 + 5,
+						m_gameObject[i]->posZ,
+						m_gameObject[i]->size,
+						5,
+						0, 0, 1, 1,
+						m_gameObject[i]->lifeCount / CHARACTER_ARCHER_LIFE,
+						0.4
+					);
 				}
-				m_renderer->DrawSolidRectGauge(
-					m_gameObject[i]->posX,
-					m_gameObject[i]->posY + m_gameObject[i]->size / 2 + 5,
-					m_gameObject[i]->posZ,
-					m_gameObject[i]->size,
-					5,
-					0, 0, 1, 1,
-					m_gameObject[i]->lifeCount / CHARACTER_LIFE,
-					0.4
-				);
 			}
 			else if (m_gameObject[i]->type == OBJECT_ARROW && m_gameObject[i]->team == BLUE_TEAM) {
 				m_renderer->DrawParticle(
@@ -411,14 +473,12 @@ void SceneMgr::DeleteObject()
 {
 	delete[] m_gameObject;
 	delete[] m_renderer;
-	delete[] m_BGM;
-	m_BGM->DeleteSound(soundBG);
 	delete[] m_Bang;
 	m_Bang->DeleteSound(soundBang);
 	delete[] m_Hit;
 	m_Hit->DeleteSound(soundHit);
-	delete[] m_CriHit;
-	m_CriHit->DeleteSound(soundCriHit);
+	delete[] m_BuildingHit;
+	m_BuildingHit->DeleteSound(soundBuildingHit);
 	delete[] m_knightBT;
 	delete[] m_archerBT;
 }
@@ -459,21 +519,12 @@ void SceneMgr::Update(float elapsedTime)
 		m_gameObject[i]->collisionCheck = false; //충돌 초기화
 	}
 
-	for (int i = 0; i < MAX_OBJECTS_COUNT; i++) { // 화면 나간 총알은 체력 0
-		if (m_gameObject[i]->type == OBJECT_ARROW || m_gameObject[i]->type == OBJECT_BULLET) {
+	for (int i = 0; i < MAX_OBJECTS_COUNT; i++) { // 화면 나간 오브젝트는 체력 0
+		if (m_gameObject[i]->type == OBJECT_ARROW || m_gameObject[i]->type == OBJECT_BULLET || m_gameObject[i]->type == OBJECT_CHARACTER) {
 			if (m_gameObject[i]->posX > WINDOW_WIDTH / 2 || m_gameObject[i]->posX < -WINDOW_WIDTH / 2 ||
 				m_gameObject[i]->posY > WINDOW_HEIGHT / 2 || m_gameObject[i]->posY < -WINDOW_HEIGHT / 2) {
 				m_gameObject[i]->lifeCount = 0;
 			}
-		}
-	}
-
-	for (int i = 0; i < MAX_OBJECTS_COUNT; i++) { // 캐릭터는 화면 안나감
-		if (m_gameObject[i]->type == OBJECT_CHARACTER) {
-			if (m_gameObject[i]->posX > WINDOW_WIDTH / 2) { m_gameObject[i]->dirX = -1; }
-			if (m_gameObject[i]->posX < -WINDOW_WIDTH / 2) { m_gameObject[i]->dirX = 1; }
-			if (m_gameObject[i]->posY > WINDOW_HEIGHT / 2) { m_gameObject[i]->dirY = -1; }
-			if (m_gameObject[i]->posY < -WINDOW_HEIGHT / 2) { m_gameObject[i]->dirY = 1; }
 		}
 	}
 
@@ -483,22 +534,8 @@ void SceneMgr::Update(float elapsedTime)
 	for (int i = 0; i < MAX_OBJECTS_COUNT; i++) {
 		for (int j = 0; j < MAX_OBJECTS_COUNT; j++) {
 			if(m_gameObject[i]->team != m_gameObject[j]->team){ //서로 다른 팀인 경우에만 충돌
-				//건물 - 캐릭터간 충돌 
-				if ((m_gameObject[i]->type == OBJECT_BUILDING && m_gameObject[j]->type == OBJECT_CHARACTER) || (m_gameObject[i]->type == OBJECT_CHARACTER && m_gameObject[j]->type == OBJECT_BUILDING)) {
-					if (Collision(*m_gameObject[i], *m_gameObject[j]) == true) {
-						m_gameObject[i]->collisionCheck = true; //충돌중이에요~
-						m_gameObject[j]->collisionCheck = true; //얘랑요
-						if (m_gameObject[i]->damageCheck == false || m_gameObject[j]->damageCheck == false) { // 마주친 둘 중 하나라도 충돌 중이 아니었다면
-							m_CriHit->PlaySound(soundCriHit, false, 1.0f);
-							m_gameObject[i]->lifeCount -= m_gameObject[j]->attackPower; // 서로의 공격력만큼 각각 생명력 감소
-							m_gameObject[j]->lifeCount -= m_gameObject[i]->attackPower;
-							m_gameObject[i]->damageCheck = true;
-							m_gameObject[j]->damageCheck = true;
-						}
-					}
-				}
 				//캐릭터 - 건물총알간 충돌
-				else if ((m_gameObject[i]->type == OBJECT_CHARACTER && m_gameObject[j]->type == OBJECT_ARROW) || (m_gameObject[i]->type == OBJECT_ARROW && m_gameObject[j]->type == OBJECT_CHARACTER)) {
+				if ((m_gameObject[i]->type == OBJECT_CHARACTER && m_gameObject[j]->type == OBJECT_ARROW) || (m_gameObject[i]->type == OBJECT_ARROW && m_gameObject[j]->type == OBJECT_CHARACTER)) {
 					if (Collision(*m_gameObject[i], *m_gameObject[j]) == true) {
 						m_gameObject[i]->collisionCheck = true; //충돌중이에요~
 						m_gameObject[j]->collisionCheck = true; //얘랑요
@@ -517,7 +554,7 @@ void SceneMgr::Update(float elapsedTime)
 						m_gameObject[i]->collisionCheck = true; //충돌중이에요~
 						m_gameObject[j]->collisionCheck = true; //얘랑요
 						if (m_gameObject[i]->damageCheck == false || m_gameObject[j]->damageCheck == false) { // 마주친 둘 중 하나라도 충돌 중이 아니었다면
-							m_Hit->PlaySound(soundHit, false, 1.0f);
+							m_BuildingHit->PlaySound(soundBuildingHit, false, 1.0f);
 							m_gameObject[i]->lifeCount -= m_gameObject[j]->attackPower; // 서로의 공격력만큼 각각 생명력 감소
 							m_gameObject[j]->lifeCount -= m_gameObject[i]->attackPower;
 							m_gameObject[i]->damageCheck = true;
@@ -545,7 +582,7 @@ void SceneMgr::Update(float elapsedTime)
 						m_gameObject[i]->collisionCheck = true; //충돌중이에요~
 						m_gameObject[j]->collisionCheck = true; //얘랑요
 						if (m_gameObject[i]->damageCheck == false || m_gameObject[j]->damageCheck == false) { // 마주친 둘 중 하나라도 충돌 중이 아니었다면
-							m_Hit->PlaySound(soundHit, false, 1.0f);
+							m_BuildingHit->PlaySound(soundBuildingHit, false, 1.0f);
 							m_gameObject[i]->lifeCount -= m_gameObject[j]->attackPower; // 서로의 공격력만큼 각각 생명력 감소
 							m_gameObject[j]->lifeCount -= m_gameObject[i]->attackPower;
 							m_gameObject[i]->damageCheck = true;

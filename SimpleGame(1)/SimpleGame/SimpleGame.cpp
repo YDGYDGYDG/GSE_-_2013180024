@@ -57,7 +57,7 @@ void MouseInput(int button, int state, int x, int y)
 		lastX = x - (WINDOW_WIDTH / 2); lastY = (WINDOW_HEIGHT / 2) - y;
 		std::cout << x << ", " << y << std::endl;
 		if (y > (WINDOW_HEIGHT / 2) && y < WINDOW_HEIGHT - 200 && g_SceneMgr->characterResenCool >= 2.0f &&
-			x - (WINDOW_WIDTH / 2) > -175 && x - (WINDOW_WIDTH / 2) < 175) 
+			x - (WINDOW_WIDTH / 2) > -175 && x - (WINDOW_WIDTH / 2) < 175 && g_SceneMgr->BLUEcharacterCounter < MAX_BLUE_CHARACTERS_COUNT)
 		{
 			g_SceneMgr->AddObject(x - (WINDOW_WIDTH / 2), (WINDOW_HEIGHT / 2) - y, 0, OBJECT_CHARACTER, -1, BLUE_TEAM);
 			g_SceneMgr->characterResenCool = 0.f;
