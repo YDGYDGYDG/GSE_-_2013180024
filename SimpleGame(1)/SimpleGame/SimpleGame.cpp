@@ -20,6 +20,7 @@ but WITHOUT ANY WARRANTY.
 
 SceneMgr *g_SceneMgr = NULL;
 float g_prevTime = 0;
+float lastX, lastY;
 
 void RenderScene(void)
 {
@@ -53,11 +54,29 @@ void MouseInput(int button, int state, int x, int y)
 {
 	//RenderScene();
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-		//std::cout << x << ", " << y << std::endl;
-		if (y > (WINDOW_HEIGHT / 2) && g_SceneMgr->characterResenCool >= 2.0f) {
+		lastX = x - (WINDOW_WIDTH / 2); lastY = (WINDOW_HEIGHT / 2) - y;
+		std::cout << x << ", " << y << std::endl;
+		if (y > (WINDOW_HEIGHT / 2) && y < WINDOW_HEIGHT - 200 && g_SceneMgr->characterResenCool >= 2.0f &&
+			x - (WINDOW_WIDTH / 2) > -175 && x - (WINDOW_WIDTH / 2) < 175) 
+		{
 			g_SceneMgr->AddObject(x - (WINDOW_WIDTH / 2), (WINDOW_HEIGHT / 2) - y, 0, OBJECT_CHARACTER, -1, BLUE_TEAM);
 			g_SceneMgr->characterResenCool = 0.f;
 		}
+		else if (lastX >= g_SceneMgr->m_knightBT->bb.leftBottom[0] && lastX <= g_SceneMgr->m_knightBT->bb.rightTop[0]
+			&& lastY >= g_SceneMgr->m_knightBT->bb.leftBottom[1] && lastY <= g_SceneMgr->m_knightBT->bb.rightTop[1]) {
+			g_SceneMgr->m_archerBT->pushed = false;
+			g_SceneMgr->m_knightBT->pushed = true;
+			g_SceneMgr->whatButton = KNIGHT_PUSHED;
+		}
+		else if (lastX >= g_SceneMgr->m_archerBT->bb.leftBottom[0] && lastX <= g_SceneMgr->m_archerBT->bb.rightTop[0]
+			&& lastY >= g_SceneMgr->m_archerBT->bb.leftBottom[1] && lastY <= g_SceneMgr->m_archerBT->bb.rightTop[1]) {
+			g_SceneMgr->m_archerBT->pushed = true;
+			g_SceneMgr->m_knightBT->pushed = false;
+			g_SceneMgr->whatButton = ARCHER_PUSHED;
+		}
+		std::cout << g_SceneMgr->m_knightBT->posX << ", " << g_SceneMgr->m_knightBT->posY << std::endl;
+		std::cout << g_SceneMgr->m_knightBT->bb.leftBottom[0] << ", " << g_SceneMgr->m_knightBT->bb.leftBottom[1] << std::endl;
+		//std::cout << g_SceneMgr->m_knightBT->pushed << std::endl;
 	}
 }
 
@@ -94,12 +113,12 @@ int main(int argc, char **argv)
 	// Initialize Renderer
 
 	g_SceneMgr = new SceneMgr();
-	g_SceneMgr->AddObject(0, 330, 0, OBJECT_BUILDING, -1, RED_TEAM);
-	g_SceneMgr->AddObject(-120, 300, 0, OBJECT_BUILDING, -1, RED_TEAM);
-	g_SceneMgr->AddObject(120, 300, 0, OBJECT_BUILDING, -1, RED_TEAM);
-	g_SceneMgr->AddObject(0, -330, 0, OBJECT_BUILDING, -1, BLUE_TEAM);
-	g_SceneMgr->AddObject(-120, -300, 0, OBJECT_BUILDING, -1, BLUE_TEAM);
-	g_SceneMgr->AddObject(120, -300, 0, OBJECT_BUILDING, -1, BLUE_TEAM);
+	g_SceneMgr->AddObject(0, WINDOW_HEIGHT / 3+50, 0, OBJECT_BUILDING, -1, RED_TEAM);
+	g_SceneMgr->AddObject(-WINDOW_WIDTH/4, WINDOW_HEIGHT / 3, 0, OBJECT_BUILDING, -1, RED_TEAM);
+	g_SceneMgr->AddObject(WINDOW_WIDTH / 4, WINDOW_HEIGHT / 3, 0, OBJECT_BUILDING, -1, RED_TEAM);
+	g_SceneMgr->AddObject(0, -WINDOW_HEIGHT / 3-50, 0, OBJECT_BUILDING, -1, BLUE_TEAM);
+	g_SceneMgr->AddObject(-WINDOW_WIDTH / 4, -WINDOW_HEIGHT / 3, 0, OBJECT_BUILDING, -1, BLUE_TEAM);
+	g_SceneMgr->AddObject(WINDOW_WIDTH / 4, -WINDOW_HEIGHT / 3, 0, OBJECT_BUILDING, -1, BLUE_TEAM);
 
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);

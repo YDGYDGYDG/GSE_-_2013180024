@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "Renderer.h"
 #include "Sound.h"
+#include "Button.h"
 
 //오브젝트 갯수
 #define MAX_RED_BUILDINGS_COUNT 3
@@ -20,7 +21,6 @@
 #define OBJECT_BULLET 3
 #define OBJECT_ARROW 4
 
-
 class SceneMgr
 {
 public:
@@ -29,6 +29,12 @@ public:
 
 	float enemyResenCool;
 	float characterResenCool;
+
+	//버튼
+	Button *m_knightBT;
+	Button *m_archerBT;
+	//버튼상태
+	int whatButton;
 
 	void AddObject(int x, int y, int z, int type, int master, int team); //객체생성
 	void DeleteObject(); //모든 객체 삭제
@@ -53,6 +59,7 @@ private:
 	GameObject* m_gameObject[MAX_OBJECTS_COUNT];
 	Renderer *m_renderer;
 
+
 	Sound *m_BGM;//배경음악
 	int soundBG;
 	Sound *m_Bang;//건물 터지는 소리
@@ -62,16 +69,32 @@ private:
 	Sound *m_CriHit;//캐릭터가 건물에 자폭하는 소리
 	int soundCriHit;
 	
+
 	//텍스처
 	GLuint m_texBG;
+	GLuint m_texBGgrass;
+	GLuint m_texBGland;
+	GLuint m_texKnightBT;
+	GLuint m_texArcherBT;
 	GLuint m_texCharacter;
-	int characterAnimationStack;
+	float characterAnimationStack;
 	GLuint m_texBlueTeamBuilding;
-	GLuint m_texBlueTeamCharacter;
+	GLuint m_texBlueTeamArcherRun;
+	GLuint m_texBlueTeamArcherAttack;
+	GLuint m_texBlueTeamArcherTip;
+	GLuint m_texBlueTeamKnightRun;
+	GLuint m_texBlueTeamKnightAttack;
+	GLuint m_texBlueTeamKnightTip;
 	GLuint m_texArrow;
 	GLuint m_texRedTeamBuilding;
-	GLuint m_texRedTeamCharacter;
+	GLuint m_texRedTeamArcherRun;
+	GLuint m_texRedTeamArcherAttack;
+	GLuint m_texRedTeamArcherTip;
+	GLuint m_texRedTeamKnightRun;
+	GLuint m_texRedTeamKnightAttack;
+	GLuint m_texRedTeamKnightTip;
 	GLuint m_texClimateParticle; //날씨
 	double climateTime;
+
 };
 
