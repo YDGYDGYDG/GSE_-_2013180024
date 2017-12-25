@@ -6,6 +6,7 @@
 #define SOUND_BGM "..\\Resource\\Sounds\\Delirium.wav"
 #define SOUND_BOSS_BGM "..\\Resource\\Sounds\\BOSS.wav"
 #define SOUND_END_BGM "..\\Resource\\Sounds\\m_end.wav"
+#define SOUND_CLEAR_BGM "..\\Resource\\Sounds\\m_pass.wav"
 
 
 SceneMgr::SceneMgr()
@@ -717,6 +718,9 @@ void SceneMgr::DeleteDeadObject() {
 				if (m_gameObject[i]->team == RED_TEAM) {
 					m_Bang->PlaySound(soundBang, false, 1.0f);
 					REDbuildingCounter--;
+					if (REDbuildingCounter < 1) {
+					PlaySound(TEXT(SOUND_CLEAR_BGM), NULL, SND_FILENAME | SND_ASYNC);
+					}
 				}
 				else if (m_gameObject[i]->team == BLUE_TEAM) {
 					m_Bang->PlaySound(soundBang, false, 1.0f);
